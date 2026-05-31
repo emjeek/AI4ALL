@@ -47,6 +47,25 @@ document.getElementById("year").textContent = new Date().getFullYear();
       });
     };
 
+    const lockViewport = () => {
+      const scrollY = window.scrollY;
+      document.body.dataset.lockedScrollY = scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.classList.add("phase-locked");
+    };
+
+    const releaseViewport = (target) => {
+      const targetTop = target.getBoundingClientRect().top + Number(document.body.dataset.lockedScrollY || 0);
+      document.body.classList.remove("phase-locked");
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      delete document.body.dataset.lockedScrollY;
+      window.scrollTo({ top: targetTop, behavior: "auto" });
+    };
+
     portalLinks.forEach((link) => {
       link.addEventListener("click", (event) => {
         const target = document.querySelector(link.getAttribute("href"));
@@ -54,10 +73,11 @@ document.getElementById("year").textContent = new Date().getFullYear();
 
         event.preventDefault();
         setPhaseMessage(phoneLayout.matches ? "ROUTE LOCKED" : (link.dataset.transition || "Materialising"));
+        lockViewport();
         phaseTransition.classList.add("active");
 
         window.setTimeout(() => {
-          target.scrollIntoView({ behavior: "auto", block: "start" });
+          releaseViewport(target);
           target.classList.remove("materialising");
           void target.offsetWidth;
           target.classList.add("materialising");
