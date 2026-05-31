@@ -77,14 +77,11 @@ document.getElementById("year").textContent = new Date().getFullYear();
         phaseTransition.classList.add("active");
 
         window.setTimeout(() => {
+          phaseTransition.classList.remove("active");
           releaseViewport(target);
           target.classList.remove("materialising");
           void target.offsetWidth;
           target.classList.add("materialising");
-        }, 1240);
-
-        window.setTimeout(() => {
-          phaseTransition.classList.remove("active");
         }, 2400);
 
         window.setTimeout(() => {
