@@ -60,15 +60,15 @@ document.getElementById("year").textContent = new Date().getFullYear();
           target.classList.remove("materialising");
           void target.offsetWidth;
           target.classList.add("materialising");
-        }, 620);
+        }, 1240);
 
         window.setTimeout(() => {
           phaseTransition.classList.remove("active");
-        }, 1120);
+        }, 2400);
 
         window.setTimeout(() => {
           target.classList.remove("materialising");
           history.replaceState(null, "", link.getAttribute("href"));
-        }, 1820);
+        }, 3640);
       });
     });
