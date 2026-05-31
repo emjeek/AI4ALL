@@ -7,6 +7,7 @@ document.getElementById("year").textContent = new Date().getFullYear();
     const phaseMessage = document.querySelector(".phase-message");
     const portalLinks = document.querySelectorAll(".portal-link");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const phoneLayout = window.matchMedia("(max-width: 720px)");
 
     const updateScrollProgress = () => {
       const scrollRange = document.documentElement.scrollHeight - window.innerHeight;
@@ -52,7 +53,7 @@ document.getElementById("year").textContent = new Date().getFullYear();
         if (!target || reducedMotion) return;
 
         event.preventDefault();
-        setPhaseMessage(link.dataset.transition || "Materialising");
+        setPhaseMessage(phoneLayout.matches ? "ROUTE LOCKED" : (link.dataset.transition || "Materialising"));
         phaseTransition.classList.add("active");
 
         window.setTimeout(() => {
