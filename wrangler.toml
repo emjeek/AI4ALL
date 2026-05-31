@@ -1,4 +1,4 @@
-name = "ai4all-mj"
+name = "ai4all"
 main = "src/worker.js"
 compatibility_date = "2026-05-31"
 
