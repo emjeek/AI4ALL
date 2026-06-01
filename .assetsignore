@@ -1,7 +1,11 @@
 node_modules
 .git
+.github
 .gitignore
 .assetsignore
+.cloudflare-deploy-trigger
+.wrangler
+AI4ALL
 package.json
 package-lock.json
 wrangler.toml
