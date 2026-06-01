@@ -1,4 +1,5 @@
-document.getElementById("year").textContent = new Date().getFullYear();
+const year = document.getElementById("year");
+if (year) year.textContent = new Date().getFullYear();
 
     const scrollProgress = document.querySelector(".scroll-progress");
     const helpCardGrid = document.querySelector(".card-grid");
@@ -10,6 +11,8 @@ document.getElementById("year").textContent = new Date().getFullYear();
     const phoneLayout = window.matchMedia("(max-width: 720px)");
 
     const updateScrollProgress = () => {
+      if (!scrollProgress) return;
+
       const scrollRange = document.documentElement.scrollHeight - window.innerHeight;
       const progress = scrollRange > 0 ? window.scrollY / scrollRange : 0;
       scrollProgress.style.transform = `scaleX(${Math.min(1, Math.max(0, progress))})`;
@@ -20,22 +23,25 @@ document.getElementById("year").textContent = new Date().getFullYear();
 
     helpCards.forEach((card) => {
       const expandButton = card.querySelector(".card-expand");
+      if (!expandButton) return;
 
       expandButton.addEventListener("click", () => {
         const willExpand = !card.classList.contains("active");
 
         helpCards.forEach((item) => {
           item.classList.remove("active");
-          item.querySelector(".card-expand").setAttribute("aria-expanded", "false");
+          item.querySelector(".card-expand")?.setAttribute("aria-expanded", "false");
         });
 
         card.classList.toggle("active", willExpand);
         expandButton.setAttribute("aria-expanded", String(willExpand));
-        helpCardGrid.classList.toggle("has-active", willExpand);
+        helpCardGrid?.classList.toggle("has-active", willExpand);
       });
     });
 
     const setPhaseMessage = (message) => {
+      if (!phaseMessage) return;
+
       phaseMessage.replaceChildren();
 
       [...message].forEach((letter, index) => {
@@ -69,7 +75,7 @@ document.getElementById("year").textContent = new Date().getFullYear();
     portalLinks.forEach((link) => {
       link.addEventListener("click", (event) => {
         const target = document.querySelector(link.getAttribute("href"));
-        if (!target || reducedMotion) return;
+        if (!target || !phaseTransition || reducedMotion) return;
 
         event.preventDefault();
         setPhaseMessage(phoneLayout.matches ? "ROUTE LOCKED" : (link.dataset.transition || "Materialising"));
