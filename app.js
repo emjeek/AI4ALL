@@ -74,10 +74,13 @@ if (year) year.textContent = new Date().getFullYear();
 
     portalLinks.forEach((link) => {
       link.addEventListener("click", (event) => {
-        const target = document.querySelector(link.getAttribute("href"));
+        const href = link.getAttribute("href");
+        const target = href?.startsWith("#") ? document.querySelector(href) : null;
         if (!target || !phaseTransition || reducedMotion) return;
 
         event.preventDefault();
+        if (document.body.classList.contains("phase-locked")) return;
+
         setPhaseMessage(phoneLayout.matches ? "ROUTE LOCKED" : (link.dataset.transition || "Materialising"));
         lockViewport();
         phaseTransition.classList.add("active");
@@ -92,7 +95,7 @@ if (year) year.textContent = new Date().getFullYear();
 
         window.setTimeout(() => {
           target.classList.remove("materialising");
-          history.replaceState(null, "", link.getAttribute("href"));
+          history.replaceState(null, "", href);
         }, 3640);
       });
     });
