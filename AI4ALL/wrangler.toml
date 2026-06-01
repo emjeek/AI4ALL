@@ -1,7 +1,0 @@
-name = "ai4all-mj"
-main = "src/worker.js"
-compatibility_date = "2026-05-31"
-
-[assets]
-directory = "."
-binding = "ASSETS"
