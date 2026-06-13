@@ -319,7 +319,7 @@ function createNetwork() {
     label.className = `node-label ${data.parent ? "node-label-small" : ""}`;
     label.type = "button";
     label.dataset.node = data.id;
-    label.hidden = data.id === "approach";
+    group.userData.labelOffset = data.id === "approach" ? { x: 0, y: 58 } : { x: 0, y: 0 };
     label.innerHTML = `<i style="--label-color:#${data.color.toString(16).padStart(6, "0")}"></i><span>${data.short}</span>`;
     label.addEventListener("click", () => selectNode(data));
     labelContainer.appendChild(label);
@@ -435,7 +435,7 @@ function bindInterface() {
     });
   });
 
-  document.getElementById("panel-close").addEventListener("click", closePanel);
+  document.getElementById("panel-close").addEventListener("click", resetView);
   document.getElementById("next-node").addEventListener("click", () => {
     if (!activeNode) return;
     const index = nodes.findIndex((node) => node.id === activeNode.id);
@@ -452,7 +452,7 @@ function bindInterface() {
     }
     if (event.key === "Escape") {
       if (searchLayer.classList.contains("open")) closeSearch();
-      else closePanel();
+      else if (detailPanel.classList.contains("open")) resetView();
     }
   });
 }
@@ -637,7 +637,10 @@ function updateLabels() {
     const label = group.userData.label;
     const position = group.getWorldPosition(new THREE.Vector3()).project(camera);
     const visible = position.z < 1 && position.z > -1;
-    label.style.transform = `translate(-50%, -50%) translate(${(position.x * 0.5 + 0.5) * window.innerWidth}px, ${(-position.y * 0.5 + 0.5) * window.innerHeight}px)`;
+    const offset = group.userData.labelOffset;
+    const x = (position.x * 0.5 + 0.5) * window.innerWidth + offset.x;
+    const y = (-position.y * 0.5 + 0.5) * window.innerHeight + offset.y;
+    label.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
     label.style.opacity = visible ? "1" : "0";
     label.style.pointerEvents = visible ? "auto" : "none";
   });

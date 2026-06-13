@@ -484,10 +484,6 @@ footer a {
   pointer-events: none;
 }
 
-.node-label[hidden] {
-  display: none;
-}
-
 .node-label {
   position: absolute;
   display: flex;
