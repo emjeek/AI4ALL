@@ -49,36 +49,36 @@ const nodes = [
   {
     id: "services", parent: null, type: "Work with MJ", index: "02 / SERVICES",
     title: "Ways to work together", short: "Services",
-    summary: "From one clear conversation to a complete workflow, every service is built to make AI easier tomorrow.",
-    example: "Explore clarity sessions, custom prompts, workflow setup, and practical team training.",
+    summary: "Start with a free 15-minute clarity call, then choose only the practical support your situation needs.",
+    example: "Explore a focused clarity session, custom prompt pack, workflow setup, or beginner-friendly team training.",
     position: [3.7, 0.55, -0.2], color: 0xa20f1a, size: 0.54
   },
   {
     id: "clarity", parent: "services", type: "Work with MJ", index: "01 / CLARITY",
-    title: "AI Clarity Session", short: "Clarity session",
-    summary: "A simple one-on-one session to find where AI can help your life, work, team, or business immediately.",
-    example: "Talk through what feels repetitive, messy, slow, or harder than it should be, then leave with a clear next step.",
+    title: "Free AI Clarity Call", short: "Free clarity call",
+    summary: "A free 15-minute conversation to find where AI could help your life, work, team, or business.",
+    example: "Talk through what feels repetitive, messy, slow, or harder than it should be, then identify the clearest next step.",
     position: [5.75, 2.65, 0.6], color: 0xd82b38, size: 0.32,
-    action: ["Book a clarity call", "mailto:Ai4All.mj@gmail.com?subject=AI%20clarity%20call"]
+    action: ["Book your free 15-min call", "mailto:Ai4All.mj@gmail.com?subject=Free%2015-minute%20AI%20clarity%20call"]
   },
   {
     id: "prompts", parent: "services", type: "Work with MJ", index: "02 / TOOLKIT",
     title: "Custom Prompt Packs", short: "Prompt packs",
-    summary: "Reusable prompts built around your actual work, in language that makes sense.",
+    summary: "Reusable prompts built around your exact work and written in language that makes sense. Custom quote.",
     example: "Get a practical toolkit for the tasks you repeat, without generic examples or prompt-engineering jargon.",
     position: [6.4, -1.1, -0.9], color: 0xd82b38, size: 0.3
   },
   {
     id: "workflows", parent: "services", type: "Work with MJ", index: "03 / SYSTEMS",
     title: "Workflow Setup", short: "Workflows",
-    summary: "Practical AI systems for repeated tasks like email, documents, content, planning, admin, and communication.",
+    summary: "Practical AI systems for repeated tasks like email, documents, content, planning, admin, and communication. Priced to scope.",
     example: "Connect the steps you already take into one simple, repeatable process that saves time every week.",
     position: [3.35, -2.7, 1.1], color: 0xd82b38, size: 0.3
   },
   {
     id: "training", parent: "services", type: "Work with MJ", index: "04 / CONFIDENCE",
     title: "Team Training", short: "Team training",
-    summary: "Clear, beginner-friendly workshops that help people use AI practically, safely, and confidently.",
+    summary: "Clear, beginner-friendly workshops that help people use AI practically, safely, and confidently. Custom quote.",
     example: "Give a whole team a useful starting point with examples they can put to work immediately.",
     position: [1.4, 2.85, 1.25], color: 0xd82b38, size: 0.3
   },
@@ -124,7 +124,7 @@ const nodes = [
     summary: "Find the simplest way AI can save you time, reduce the clutter, and make your work easier.",
     example: "No jargon. No pressure. Just a practical conversation about what would genuinely help.",
     position: [0.1, 5.75, -0.65], color: 0xf0cf7a, size: 0.31,
-    action: ["Book a clarity call", "mailto:Ai4All.mj@gmail.com?subject=Book%20an%20AI4ALL%20clarity%20call"]
+    action: ["Book your free 15-min call", "mailto:Ai4All.mj@gmail.com?subject=Free%2015-minute%20AI%20clarity%20call"]
   }
 ];
 

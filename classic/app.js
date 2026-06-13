@@ -1,6 +1,41 @@
 const year = document.getElementById("year");
 if (year) year.textContent = new Date().getFullYear();
 
+    const freeCallHref = "mailto:Ai4All.mj@gmail.com?subject=Free%2015-minute%20AI%20clarity%20call";
+    const heroCopy = document.querySelector(".hero-copy");
+    if (heroCopy) {
+      heroCopy.innerHTML = "I help you turn <strong>messy thoughts, notes, emails, meetings, and admin into clear finished work — faster.</strong> Practical AI for your life, business, team, school, church, or organisation.";
+    }
+
+    document.querySelectorAll('a[href^="mailto:Ai4All.mj@gmail.com"][href*="clarity"]').forEach((link) => {
+      link.href = freeCallHref;
+      if (link.classList.contains("button-gold")) {
+        link.innerHTML = 'Book a free 15-minute AI clarity call <span aria-hidden="true">&rarr;</span>';
+      }
+    });
+
+    const serviceOffers = [
+      ["Free starting point", "A free 15-minute conversation to identify where AI could help and what to do next."],
+      ["Custom quote", "A focused toolkit shaped around the work and prompts you actually need."],
+      ["Priced to scope", "A practical system designed around the size and complexity of your workflow."],
+      ["Custom quote", "Beginner-friendly training shaped around your team, examples, and goals."]
+    ];
+
+    document.querySelectorAll(".services-grid .service").forEach((service, index) => {
+      const copy = service.querySelector("p");
+      const offer = serviceOffers[index];
+      if (!copy || !offer) return;
+      if (index === 0) service.querySelector("h3").textContent = "Free AI Clarity Call";
+      copy.textContent = offer[1];
+      const badge = document.createElement("span");
+      badge.className = "service-offer";
+      badge.textContent = offer[0];
+      service.querySelector(".service-top")?.append(badge);
+    });
+
+    const contactRole = document.querySelector(".contact-role");
+    if (contactRole) contactRole.textContent = "Practical AI guide · AI4ALL";
+
     const scrollProgress = document.querySelector(".scroll-progress");
     const helpCardGrid = document.querySelector(".card-grid");
     const helpCards = document.querySelectorAll(".card-grid .card");
