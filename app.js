@@ -6,6 +6,9 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const mobile = window.matchMedia("(max-width: 760px)").matches;
+const spatialScale = mobile ? 1.1 : 1.18;
+const homeCameraPosition = new THREE.Vector3(mobile ? 0 : 1.6, mobile ? 1.1 : 0.9, mobile ? 15.8 : 13.7);
+const homeCameraTarget = new THREE.Vector3(0, 0.5, -1.45);
 
 const nodes = [
   {
@@ -132,6 +135,7 @@ let activeNode = null;
 let hoveredNode = null;
 let cameraTween = null;
 let pointerDown = null;
+let hoveredResetTarget = false;
 
 const sceneRoot = document.getElementById("scene");
 const detailPanel = document.getElementById("detail-panel");
@@ -171,14 +175,14 @@ function initScene() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 0.94;
   sceneRoot.appendChild(renderer.domElement);
 
   scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x050403, mobile ? 0.045 : 0.038);
 
   camera = new THREE.PerspectiveCamera(46, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(mobile ? 0 : 1.4, mobile ? 1 : 0.8, mobile ? 14.5 : 12);
+  camera.position.copy(homeCameraPosition);
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
@@ -188,7 +192,7 @@ function initScene() {
   controls.enablePan = false;
   controls.autoRotate = !reducedMotion;
   controls.autoRotateSpeed = 0.18;
-  controls.target.set(0, 0.5, -1.3);
+  controls.target.copy(homeCameraTarget);
 
   scene.add(new THREE.AmbientLight(0x72552f, 0.5));
   const warmLight = new THREE.PointLight(0xffd98a, 42, 24, 1.8);
@@ -213,9 +217,9 @@ function initScene() {
   composer.addPass(new RenderPass(scene, camera));
   const bloom = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
-    mobile ? 0.55 : 1.05,
+    mobile ? 0.42 : 0.82,
     0.7,
-    0.72
+    0.84
   );
   composer.addPass(bloom);
 
@@ -227,7 +231,7 @@ function initScene() {
 function createCore() {
   const core = new THREE.Group();
   const shell = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(1.15, 2),
+    new THREE.IcosahedronGeometry(1.15, 3),
     new THREE.MeshStandardMaterial({
       color: 0x17120c,
       emissive: 0x8b5b1d,
@@ -261,6 +265,9 @@ function createCore() {
     ringA.rotation.z = time * 0.08;
     ringB.rotation.z = -time * 0.06;
   };
+  shell.userData.resetView = true;
+  inner.userData.resetView = true;
+  clickTargets.push(shell, inner);
   networkGroup.add(core);
 }
 
@@ -272,7 +279,7 @@ function createNetwork() {
 
   nodes.forEach((data, index) => {
     const group = new THREE.Group();
-    group.position.fromArray(data.position);
+    group.position.copy(getScenePosition(data));
     group.userData.node = data;
     group.userData.phase = index * 0.71;
 
@@ -287,7 +294,7 @@ function createNetwork() {
     glow.scale.setScalar(data.size * 4.2);
 
     const sphere = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(data.size, data.size > 0.4 ? 2 : 1),
+      new THREE.IcosahedronGeometry(data.size, data.size > 0.4 ? 3 : 2),
       new THREE.MeshStandardMaterial({
         color: data.color,
         emissive: data.color,
@@ -312,6 +319,7 @@ function createNetwork() {
     label.className = `node-label ${data.parent ? "node-label-small" : ""}`;
     label.type = "button";
     label.dataset.node = data.id;
+    label.hidden = data.id === "approach";
     label.innerHTML = `<i style="--label-color:#${data.color.toString(16).padStart(6, "0")}"></i><span>${data.short}</span>`;
     label.addEventListener("click", () => selectNode(data));
     labelContainer.appendChild(label);
@@ -329,8 +337,8 @@ function createNetwork() {
 }
 
 function createConnection(startArray, endArray, color, index, subtle = false) {
-  const start = new THREE.Vector3(...startArray);
-  const end = new THREE.Vector3(...endArray);
+  const start = new THREE.Vector3(...startArray).multiplyScalar(spatialScale);
+  const end = new THREE.Vector3(...endArray).multiplyScalar(spatialScale);
   const mid = start.clone().lerp(end, 0.5);
   mid.z += 0.5 + (index % 3) * 0.16;
   const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
@@ -454,23 +462,35 @@ function onPointerMove(event) {
   pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
   raycaster.setFromCamera(pointer, camera);
   const hit = raycaster.intersectObjects(clickTargets, false)[0];
+  hoveredResetTarget = Boolean(hit?.object.userData.resetView);
   const nextHovered = hit?.object.userData.node || null;
-  if (nextHovered?.id === hoveredNode?.id) return;
+  if (nextHovered?.id === hoveredNode?.id) {
+    renderer.domElement.style.cursor = hoveredNode || hoveredResetTarget ? "pointer" : "grab";
+    return;
+  }
 
   if (hoveredNode) setNodeState(hoveredNode.id, false, activeNode?.id === hoveredNode.id);
   hoveredNode = nextHovered;
   if (hoveredNode) setNodeState(hoveredNode.id, true, activeNode?.id === hoveredNode.id);
-  renderer.domElement.style.cursor = hoveredNode ? "pointer" : "grab";
+  renderer.domElement.style.cursor = hoveredNode || hoveredResetTarget ? "pointer" : "grab";
 }
 
 function pickNode() {
   raycaster.setFromCamera(pointer, camera);
   const hit = raycaster.intersectObjects(clickTargets, false)[0];
-  if (hit) selectNode(hit.object.userData.node);
+  if (hit?.object.userData.resetView) {
+    resetView();
+    return;
+  }
+  if (hit?.object.userData.node) selectNode(hit.object.userData.node);
 }
 
 function selectNode(data) {
   if (!data) return;
+  if (activeNode?.id === data.id) {
+    resetView();
+    return;
+  }
   activeNode = data;
   controls.autoRotate = false;
   intro.classList.add("minimised");
@@ -504,7 +524,7 @@ function selectNode(data) {
   detailPanel.setAttribute("aria-hidden", "false");
   detailPanel.removeAttribute("inert");
 
-  const target = new THREE.Vector3(...data.position);
+  const target = getScenePosition(data);
   const direction = target.clone().normalize();
   if (direction.lengthSq() < 0.01) direction.set(0, 0, 1);
   const offset = mobile
@@ -550,10 +570,14 @@ function resetView() {
     start: performance.now(),
     duration: reducedMotion ? 1 : 1100,
     fromPosition: camera.position.clone(),
-    toPosition: new THREE.Vector3(mobile ? 0 : 1.4, mobile ? 1 : 0.8, mobile ? 14.5 : 12),
+    toPosition: homeCameraPosition.clone(),
     fromTarget: controls.target.clone(),
-    toTarget: new THREE.Vector3(0, 0.5, -1.3)
+    toTarget: homeCameraTarget.clone()
   };
+}
+
+function getScenePosition(data) {
+  return new THREE.Vector3(...data.position).multiplyScalar(spatialScale);
 }
 
 function openSearch() {
@@ -640,7 +664,7 @@ function animate(time = 0) {
       object.position.copy(object.userData.curve.getPoint(progress));
     }
     if (object.userData.node) {
-      const baseY = object.userData.node.position[1];
+      const baseY = object.userData.node.position[1] * spatialScale;
       object.position.y = baseY + Math.sin(seconds * 0.65 + object.userData.phase) * 0.06;
       object.rotation.y = seconds * 0.08 + object.userData.phase;
     }
