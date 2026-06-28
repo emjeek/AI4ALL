@@ -305,6 +305,9 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  const inVersionMenu = event.target instanceof Element && event.target.closest(".version-menu");
+  if (inVersionMenu && event.key !== "Escape") return;
+
   if (event.key === "Enter" || event.key === "ArrowRight" || event.key === "PageDown") {
     event.preventDefault();
     goNext();
