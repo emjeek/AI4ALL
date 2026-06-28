@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI4ALL helps people, businesses, schools, churches, and community teams make AI simple, practical, and genuinely useful.">
+  <meta name="theme-color" content="#050403">
+  <title>AI4ALL | Practical AI Help with MJ Kemp</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="scene" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-mark"><span>AI</span><b>4</b><span>ALL</span></div>
+    <p>Building your practical AI map</p>
+    <div class="loading-line"><i></i></div>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#" data-action="reset" aria-label="AI4ALL home">
+      <span>AI</span><b>4</b><span>ALL</span>
+      <small>with MJ Kemp</small>
+    </a>
+
+    <div class="system-status" aria-label="Scene status">
+      <i></i>
+      <span>Practical AI network online</span>
+    </div>
+
+    <div class="top-actions">
+      <a class="view-switch" href="/" aria-label="Switch to the classic scrolling page">
+        <span class="view-switch-icon" aria-hidden="true">≡</span>
+        <span>Simple page</span>
+      </a>
+      <button class="icon-button" id="search-open" type="button" aria-label="Search the AI4ALL network">
+        <span class="search-icon"></span>
+        <span class="button-label">Search</span>
+        <kbd>/</kbd>
+      </button>
+      <a class="contact-link" href="mailto:Ai4All.mj@gmail.com?subject=Free%2015-minute%20AI%20clarity%20call">Book a free 15-min call <span>↗</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" id="intro" aria-labelledby="intro-title">
+      <p class="kicker">Practical AI help for real life and real work</p>
+      <h1 id="intro-title">Make AI<br><em>actually useful.</em></h1>
+      <p class="intro-copy">Turn messy thoughts, notes, emails, meetings, and admin into clear finished work — faster.</p>
+      <div class="intro-actions">
+        <button class="primary-button" type="button" data-focus="help">Enter the network <span>→</span></button>
+        <button class="text-button" type="button" data-focus="about">Meet MJ</button>
+      </div>
+    </section>
+
+    <nav class="cluster-nav" aria-label="Explore AI4ALL topics">
+      <p>Explore the system</p>
+      <button type="button" data-focus="help"><i style="--node:#d4aa58"></i>Where AI helps</button>
+      <button type="button" data-focus="services"><i style="--node:#a20f1a"></i>Ways to work together</button>
+      <button type="button" data-focus="approach"><i style="--node:#e7cf96"></i>How it works</button>
+      <button type="button" data-focus="about"><i style="--node:#c27b45"></i>About MJ</button>
+    </nav>
+
+    <div class="scene-hint" id="scene-hint">
+      <span class="mouse-glyph"><i></i></span>
+      <p><strong>Drag to orbit</strong><br>Scroll to travel · Select a node to explore</p>
+    </div>
+
+    <div class="coordinates" aria-hidden="true">
+      <span id="coordinate-readout">X 00.0 / Y 00.0 / Z 00.0</span>
+      <span>AI4ALL KNOWLEDGE FIELD</span>
+    </div>
+
+    <aside class="detail-panel" id="detail-panel" aria-live="polite" aria-hidden="true" inert>
+      <button class="panel-close" id="panel-close" type="button" aria-label="Close details">×</button>
+      <div class="panel-index" id="panel-index">01 / BUSINESS</div>
+      <p class="panel-type" id="panel-type">Where AI helps</p>
+      <h2 id="panel-title">Small Business AI</h2>
+      <p class="panel-summary" id="panel-summary"></p>
+      <div class="panel-example">
+        <span>In the real world</span>
+        <p id="panel-example"></p>
+      </div>
+      <div class="panel-links" id="panel-links"></div>
+      <div class="panel-footer">
+        <span id="panel-position">NODE 01 · ACTIVE</span>
+        <button type="button" id="next-node">Explore next node <span>→</span></button>
+      </div>
+    </aside>
+
+    <div class="search-layer" id="search-layer" aria-hidden="true">
+      <button class="search-backdrop" type="button" data-action="close-search" aria-label="Close search"></button>
+      <section class="search-console" role="dialog" aria-modal="true" aria-labelledby="search-heading">
+        <div class="search-input-wrap">
+          <span class="search-icon"></span>
+          <label class="sr-only" for="network-search" id="search-heading">Search the AI4ALL network</label>
+          <input id="network-search" type="search" autocomplete="off" placeholder="What could AI make easier?">
+          <button type="button" data-action="close-search">ESC</button>
+        </div>
+        <div class="search-meta">
+          <span>Search services, use cases, and ideas</span>
+          <span id="result-count">Start typing to map a path</span>
+        </div>
+        <div class="search-results" id="search-results"></div>
+      </section>
+    </div>
+
+    <div class="fallback-message" id="fallback-message" hidden>
+      <p class="kicker">AI4ALL / Practical help</p>
+      <h2>Your browser could not start the 3D experience.</h2>
+      <p>You can still contact MJ for simple, practical AI help.</p>
+      <a class="primary-button" href="mailto:Ai4All.mj@gmail.com">Email MJ <span>→</span></a>
+    </div>
+  </main>
+
+  <footer>
+    <span>© <span id="year"></span> AI4ALL</span>
+    <span>Clear over clever · Human first · No jargon</span>
+    <a href="tel:+61499977712">0499 977 712</a>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
