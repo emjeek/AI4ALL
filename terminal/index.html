@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Use the AI4ALL terminal to find practical AI help for business, life, teams, schools, churches, and community groups.">
+  <meta name="theme-color" content="#050302">
+  <title>AI4ALL | Terminal Version</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="terminal-backdrop" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="terminal-header">
+    <a class="terminal-brand" href="/" aria-label="AI4ALL home">
+      <span>AI</span><b>4</b><span>ALL</span>
+      <small>terminal route</small>
+    </a>
+
+    <nav class="terminal-nav" aria-label="Website version navigation">
+      <a class="terminal-cta" href="mailto:Ai4All.mj@gmail.com?subject=AI%20clarity%20call">Book a clarity call</a>
+      <details class="version-menu">
+        <summary class="version-menu-toggle" aria-label="Open website version menu">
+          <span class="hamburger-lines" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>Versions</span>
+        </summary>
+        <div class="version-menu-panel">
+          <a href="/">
+            <strong>Simple page</strong>
+            <small>Clear classic scroll</small>
+          </a>
+          <a href="/immersive/">
+            <strong>3D version</strong>
+            <small>Interactive WebGL network</small>
+          </a>
+          <a href="/matrix/">
+            <strong>Code version</strong>
+            <small>Matrix journey mode</small>
+          </a>
+          <a href="/terminal/" aria-current="page">
+            <strong>Terminal version</strong>
+            <small>Guided command diagnostic</small>
+          </a>
+        </div>
+      </details>
+    </nav>
+  </header>
+
+  <main class="terminal-stage">
+    <section class="terminal-window" aria-labelledby="terminal-title">
+      <div class="terminal-topline">
+        <div>
+          <p class="terminal-kicker">AI4ALL / Practical diagnostic</p>
+          <h1 id="terminal-title">Make AI <em>actually useful.</em></h1>
+        </div>
+        <span class="terminal-status"><i></i>ONLINE</span>
+      </div>
+
+      <div class="terminal-output" id="terminal-output" aria-live="polite"></div>
+      <div class="choice-rail" id="choice-rail" aria-label="Terminal choices"></div>
+
+      <form class="command-line" id="command-form">
+        <label for="command-input" id="prompt-label">mj@ai4all:~$</label>
+        <input id="command-input" name="command" type="text" autocomplete="off" spellcheck="false" placeholder="type start, help, services, examples, about, contact">
+        <button type="submit">Run</button>
+      </form>
+    </section>
+
+    <aside class="terminal-side" aria-label="Terminal help">
+      <p class="terminal-kicker">Available commands</p>
+      <div class="command-list">
+        <button type="button" data-command="start">start</button>
+        <button type="button" data-command="help">help</button>
+        <button type="button" data-command="services">services</button>
+        <button type="button" data-command="examples">examples</button>
+        <button type="button" data-command="about">about</button>
+        <button type="button" data-command="contact">contact</button>
+        <button type="button" data-command="clear">clear</button>
+      </div>
+      <div class="diagnostic-card" id="diagnostic-card">
+        <span>Current route</span>
+        <strong>Waiting for input</strong>
+        <small>Use the buttons or type a command.</small>
+      </div>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

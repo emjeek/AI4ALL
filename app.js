@@ -120,6 +120,10 @@ if (year) year.textContent = new Date().getFullYear();
           <strong>Code version</strong>
           <small>Matrix journey mode</small>
         </a>
+        <a href="/terminal/">
+          <strong>Terminal version</strong>
+          <small>Guided command diagnostic</small>
+        </a>
       </div>
     `;
     document.querySelector(".nav-links")?.append(versionMenu);
