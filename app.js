@@ -106,3 +106,10 @@ if (year) year.textContent = new Date().getFullYear();
     immersiveLink.textContent = "3D version";
     immersiveLink.setAttribute("aria-label", "Open the immersive 3D version");
     document.querySelector(".nav-links")?.append(immersiveLink);
+
+    const matrixLink = document.createElement("a");
+    matrixLink.className = "button button-small button-dark";
+    matrixLink.href = "/matrix/";
+    matrixLink.textContent = "Code version";
+    matrixLink.setAttribute("aria-label", "Open the Matrix code version");
+    document.querySelector(".nav-links")?.append(matrixLink);
