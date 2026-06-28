@@ -444,6 +444,10 @@ function bindInterface() {
   document.getElementById("search-open").addEventListener("click", openSearch);
   document.querySelectorAll("[data-action='close-search']").forEach((button) => button.addEventListener("click", closeSearch));
   searchInput.addEventListener("input", renderSearchResults);
+  document.addEventListener("click", (event) => {
+    const clickedMenu = event.target instanceof Element ? event.target.closest(".version-menu") : null;
+    closeVersionMenus(clickedMenu);
+  });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "/" && document.activeElement !== searchInput) {
@@ -451,10 +455,21 @@ function bindInterface() {
       openSearch();
     }
     if (event.key === "Escape") {
+      if (closeVersionMenus()) return;
       if (searchLayer.classList.contains("open")) closeSearch();
       else if (detailPanel.classList.contains("open")) resetView();
     }
   });
+}
+
+function closeVersionMenus(except = null) {
+  let closed = false;
+  document.querySelectorAll(".version-menu[open]").forEach((menu) => {
+    if (menu === except) return;
+    menu.removeAttribute("open");
+    closed = true;
+  });
+  return closed;
 }
 
 function onPointerMove(event) {

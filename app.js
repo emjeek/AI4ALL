@@ -100,16 +100,41 @@ if (year) year.textContent = new Date().getFullYear();
       });
     });
 
-    const immersiveLink = document.createElement("a");
-    immersiveLink.className = "button button-small button-dark";
-    immersiveLink.href = "/immersive/";
-    immersiveLink.textContent = "3D version";
-    immersiveLink.setAttribute("aria-label", "Open the immersive 3D version");
-    document.querySelector(".nav-links")?.append(immersiveLink);
+    const versionMenu = document.createElement("details");
+    versionMenu.className = "version-menu";
+    versionMenu.innerHTML = `
+      <summary class="version-menu-toggle" aria-label="Open website version menu">
+        <span class="hamburger-lines" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>Versions</span>
+      </summary>
+      <div class="version-menu-panel">
+        <a href="/" aria-current="page">
+          <strong>Simple page</strong>
+          <small>Clear classic scroll</small>
+        </a>
+        <a href="/immersive/">
+          <strong>3D version</strong>
+          <small>Interactive WebGL network</small>
+        </a>
+        <a href="/matrix/">
+          <strong>Code version</strong>
+          <small>Matrix journey mode</small>
+        </a>
+      </div>
+    `;
+    document.querySelector(".nav-links")?.append(versionMenu);
 
-    const matrixLink = document.createElement("a");
-    matrixLink.className = "button button-small button-dark";
-    matrixLink.href = "/matrix/";
-    matrixLink.textContent = "Code version";
-    matrixLink.setAttribute("aria-label", "Open the Matrix code version");
-    document.querySelector(".nav-links")?.append(matrixLink);
+    const closeVersionMenus = (except = null) => {
+      document.querySelectorAll(".version-menu[open]").forEach((menu) => {
+        if (menu !== except) menu.removeAttribute("open");
+      });
+    };
+
+    document.addEventListener("click", (event) => {
+      const clickedMenu = event.target instanceof Element ? event.target.closest(".version-menu") : null;
+      closeVersionMenus(clickedMenu);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeVersionMenus();
+    });

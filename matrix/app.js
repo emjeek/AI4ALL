@@ -234,6 +234,16 @@ function clearTravelTimers() {
   window.clearTimeout(arriveTimer);
 }
 
+function closeVersionMenus(except = null) {
+  let closed = false;
+  document.querySelectorAll(".version-menu[open]").forEach((menu) => {
+    if (menu === except) return;
+    menu.removeAttribute("open");
+    closed = true;
+  });
+  return closed;
+}
+
 function renderChapter(index, instant = false) {
   const targetIndex = Math.max(0, Math.min(chapters.length - 1, index));
 
@@ -289,6 +299,10 @@ function goPrevious() {
 
 nextButton.addEventListener("click", goNext);
 prevButton.addEventListener("click", goPrevious);
+document.addEventListener("click", (event) => {
+  const clickedMenu = event.target instanceof Element ? event.target.closest(".version-menu") : null;
+  closeVersionMenus(clickedMenu);
+});
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Enter" || event.key === "ArrowRight" || event.key === "PageDown") {
@@ -301,6 +315,7 @@ document.addEventListener("keydown", (event) => {
   }
   if (event.key === "Escape") {
     event.preventDefault();
+    if (closeVersionMenus()) return;
     renderChapter(0);
   }
 });
