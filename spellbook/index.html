@@ -3,16 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Explore AI4ALL as a living spellbook of practical AI services, examples, and contact options with MJ Kemp.">
+  <meta name="description" content="Explore AI4ALL as an animated spellbook of practical AI services, examples, and contact options with MJ Kemp.">
   <meta name="theme-color" content="#050302">
   <title>AI4ALL | Spellbook Version</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <canvas id="spell-particles" aria-hidden="true"></canvas>
-  <div class="arcane-backdrop" aria-hidden="true"></div>
-  <div class="rune-aura" aria-hidden="true"></div>
-  <div class="ember-vignette" aria-hidden="true"></div>
+  <canvas id="spell-fx" aria-hidden="true"></canvas>
+  <div class="scene-backdrop" aria-hidden="true">
+    <div class="void-glow"></div>
+    <div class="star-grid"></div>
+    <div class="smoke-layer smoke-layer-one"></div>
+    <div class="smoke-layer smoke-layer-two"></div>
+    <div class="floor-light"></div>
+  </div>
 
   <header class="spell-header">
     <a class="spell-brand" href="/" aria-label="AI4ALL home">
@@ -53,52 +57,161 @@
     </nav>
   </header>
 
-  <main class="spell-stage">
-    <section class="spellbook-shell" aria-labelledby="spellbook-title">
-      <div class="book-runes" aria-hidden="true">
-        <i></i><i></i><i></i><i></i>
+  <main class="spell-stage" data-spell="clarity">
+    <section class="grimoire-scene" aria-labelledby="spellbook-title">
+      <div class="scene-rail scene-rail-left" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="scene-rail scene-rail-right" aria-hidden="true">
+        <span></span><span></span><span></span>
       </div>
 
-      <article class="book-page spell-index">
-        <p class="spell-kicker">AI4ALL / Practical spells</p>
-        <h1 id="spellbook-title">Make AI <em>actually useful.</em></h1>
-        <p class="spell-intro">A living spellbook for turning confusing AI into plain-language help, useful prompts, cleaner workflows, and calmer teams.</p>
+      <div class="spell-dashboard" aria-label="Spellbook status">
+        <div class="dashboard-cell">
+          <span>Current spell</span>
+          <strong id="status-spell">Clarity Spell</strong>
+        </div>
+        <div class="dashboard-cell dashboard-charge">
+          <span>Cast charge</span>
+          <div class="charge-track" aria-hidden="true"><i id="charge-fill"></i></div>
+        </div>
+        <div class="dashboard-cell">
+          <span>Page</span>
+          <strong id="status-page">01 / 07</strong>
+        </div>
+      </div>
 
-        <div class="spell-list" id="spell-list" aria-label="Spell chapters"></div>
-
-        <p class="spell-note">Click a spell, use the arrow keys, or cast the next page to move through the book.</p>
-      </article>
-
-      <article class="book-page spell-detail" id="spell-detail" aria-live="polite">
-        <div class="spell-readout">
-          <span id="spell-number">01</span>
+      <div class="rune-theatre" aria-hidden="true">
+        <div class="rune-ring rune-ring-one"></div>
+        <div class="rune-ring rune-ring-two"></div>
+        <div class="rune-ring rune-ring-three"></div>
+        <div class="rune-ring rune-ring-four"></div>
+        <div class="rune-orbit" id="rune-orbit"></div>
+        <div class="sigil-core">
+          <span>AI</span>
           <i></i>
-          <span>ACTIVE SPELL</span>
+          <b>MJ</b>
         </div>
+      </div>
 
-        <p class="spell-kicker" id="spell-subtitle">Find the first useful AI move.</p>
-        <h2 id="spell-title">Clarity Spell</h2>
-        <p class="spell-summary" id="spell-summary"></p>
+      <div class="book-wrap">
+        <div class="book-shadow" aria-hidden="true"></div>
+        <div class="book-aura" aria-hidden="true"></div>
 
-        <div class="spell-example">
-          <span>Real-world effect</span>
-          <p id="spell-example"></p>
+        <div class="book-object" id="book-object">
+          <div class="book-cover book-cover-left" aria-hidden="true">
+            <span class="cover-corner cover-corner-a"></span>
+            <span class="cover-corner cover-corner-b"></span>
+            <span class="cover-glyph cover-glyph-a">AI</span>
+            <span class="cover-glyph cover-glyph-b">USE</span>
+          </div>
+          <div class="book-cover book-cover-right" aria-hidden="true">
+            <span class="cover-corner cover-corner-c"></span>
+            <span class="cover-corner cover-corner-d"></span>
+            <span class="cover-glyph cover-glyph-c">MJ</span>
+            <span class="cover-glyph cover-glyph-d">ALL</span>
+          </div>
+
+          <div class="book-spine" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+
+          <div class="page-depth page-depth-left" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="page-depth page-depth-right" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+
+          <div class="turning-page" id="turning-page" aria-hidden="true">
+            <div class="turning-page-front"></div>
+            <div class="turning-page-back"></div>
+          </div>
+
+          <article class="book-page book-page-left">
+            <div class="page-sheen" aria-hidden="true"></div>
+            <div class="page-engraving" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </div>
+
+            <div class="page-content">
+              <p class="spell-kicker">AI4ALL / Living grimoire</p>
+              <h1 id="spellbook-title">Make AI <em>actually useful.</em></h1>
+              <p class="spell-intro">Open the book, choose the practical spell, and cast it into the real world. No jargon. No wasted time. Just useful AI with atmosphere.</p>
+
+              <label class="spell-search" for="spell-search">
+                <span>Find a spell</span>
+                <input id="spell-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search clarity, prompts, workflows...">
+              </label>
+
+              <div class="spell-index" id="spell-list" aria-label="Spell chapters"></div>
+
+              <div class="book-principles" aria-label="AI4ALL principles">
+                <span>Clear over clever</span>
+                <span>Human first</span>
+                <span>Useful tomorrow</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="book-page book-page-right" id="spell-detail" aria-live="polite">
+            <div class="page-sheen" aria-hidden="true"></div>
+            <div class="page-engraving page-engraving-right" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </div>
+
+            <div class="page-content spell-page-content">
+              <div class="spell-readout">
+                <span id="spell-number">01</span>
+                <i></i>
+                <span id="spell-school">STARTING POINT</span>
+              </div>
+
+              <p class="spell-kicker" id="spell-subtitle">Find the first useful AI move.</p>
+              <h2 id="spell-title">Clarity Spell</h2>
+              <p class="spell-summary" id="spell-summary"></p>
+
+              <div class="spell-effect-card">
+                <span>Cast effect</span>
+                <p id="spell-effect"></p>
+              </div>
+
+              <div class="spell-method">
+                <span>What the spell does</span>
+                <ul id="spell-method"></ul>
+              </div>
+
+              <div class="spell-tags" id="spell-tags" aria-label="Spell traits"></div>
+
+              <div class="cast-chamber">
+                <button class="cast-button" id="cast-spell" type="button">
+                  <span class="cast-button-ring" aria-hidden="true"></span>
+                  <span class="cast-button-text">Cast Spell</span>
+                  <small id="cast-button-small">Ignite the page</small>
+                </button>
+
+                <div class="spell-actions">
+                  <button type="button" id="prev-spell">Previous page</button>
+                  <button type="button" id="next-spell">Turn page</button>
+                  <a class="spell-primary" id="spell-cta" href="mailto:Ai4All.mj@gmail.com?subject=AI4ALL%20clarity%20spell">Book clarity</a>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
+      </div>
 
-        <div class="spell-tags" id="spell-tags" aria-label="Spell traits"></div>
-
-        <div class="spell-actions">
-          <a class="spell-primary" id="spell-cta" href="mailto:Ai4All.mj@gmail.com?subject=AI4ALL%20clarity%20spell">Cast this spell</a>
-          <button type="button" id="prev-spell">Previous</button>
-          <button type="button" id="next-spell">Next spell</button>
+      <aside class="spell-console" aria-label="Spellbook controls and feedback">
+        <div class="console-orb" aria-hidden="true"><i></i></div>
+        <span class="console-label">Spell result</span>
+        <p id="spell-result">Choose a spell or cast the active page. The runes will light when the spell locks in.</p>
+        <div class="console-controls">
+          <span>Arrow keys: turn pages</span>
+          <span>Enter: cast</span>
+          <span>Escape: close menu</span>
         </div>
-      </article>
+      </aside>
     </section>
-
-    <aside class="spell-help" aria-label="Spellbook controls">
-      <span>Controls</span>
-      <p>Arrow keys cycle spells. Escape closes the version menu. On mobile, use the rune buttons above the page.</p>
-    </aside>
   </main>
 
   <script src="app.js"></script>
