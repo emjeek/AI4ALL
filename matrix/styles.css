@@ -168,10 +168,33 @@ button {
   align-items: end;
   gap: clamp(24px, 5vw, 84px);
   padding: 118px clamp(22px, 6vw, 86px) 54px;
+  perspective: 1000px;
+}
+
+.matrix-shell::before {
+  position: fixed;
+  inset: -18vh -18vw;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+  opacity: 0;
+  background:
+    repeating-radial-gradient(circle at 50% 50%, rgba(245, 217, 143, 0.18) 0 1px, transparent 2px 32px),
+    radial-gradient(circle at 50% 50%, rgba(245, 217, 143, 0.26), transparent 12%, rgba(190, 23, 35, 0.18) 24%, transparent 42%, rgba(4, 3, 2, 0.68) 72%);
+  filter: blur(10px);
+  transform: scale(0.72);
+  transition: opacity 260ms ease, transform 980ms cubic-bezier(0.12, 0.92, 0.26, 1), filter 980ms ease;
+}
+
+.matrix-shell.is-diving::before {
+  opacity: 0.88;
+  filter: blur(0);
+  transform: scale(1.38);
 }
 
 .matrix-panel {
   position: relative;
+  z-index: 1;
   width: min(780px, 100%);
   padding: clamp(26px, 4vw, 42px);
   border: 1px solid rgba(212, 170, 88, 0.3);
@@ -181,14 +204,39 @@ button {
     var(--panel);
   box-shadow: 0 30px 110px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(212, 170, 88, 0.04);
   backdrop-filter: blur(18px);
+  transform-origin: 50% 52%;
   transform: translateY(0) scale(1);
   transition: opacity 320ms ease, transform 520ms cubic-bezier(0.18, 0.84, 0.28, 1), filter 520ms ease;
 }
 
-.matrix-panel.is-travelling {
+.matrix-panel.is-diving-out {
   opacity: 0;
-  filter: blur(10px);
-  transform: translateY(34px) scale(0.96);
+  filter: blur(24px) brightness(1.45);
+  pointer-events: none;
+  transform: translateY(-5vh) scale(2.35);
+  transition: opacity 280ms ease, transform 980ms cubic-bezier(0.12, 0.92, 0.26, 1), filter 980ms ease;
+}
+
+.matrix-panel.is-arriving {
+  animation: card-arrive 560ms cubic-bezier(0.18, 0.84, 0.28, 1) both;
+}
+
+@keyframes card-arrive {
+  0% {
+    opacity: 0;
+    filter: blur(24px) brightness(1.25);
+    transform: translateY(26px) scale(0.74);
+  }
+
+  72% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0) brightness(1);
+    transform: translateY(0) scale(1);
+  }
 }
 
 .matrix-panel::before,
@@ -328,12 +376,20 @@ h1 em {
 }
 
 .matrix-console {
+  position: relative;
+  z-index: 1;
   align-self: end;
   padding: 18px;
   border: 1px solid rgba(212, 170, 88, 0.18);
   color: var(--muted);
   background: rgba(4, 3, 2, 0.68);
   backdrop-filter: blur(12px);
+  transition: opacity 260ms ease, transform 420ms ease;
+}
+
+.matrix-shell.is-diving .matrix-console {
+  opacity: 0;
+  transform: translateY(22px);
 }
 
 .matrix-console span {
@@ -399,13 +455,24 @@ h1 em {
 }
 
 @media (max-width: 680px) {
+  .code-vignette {
+    background:
+      radial-gradient(circle at 50% 36%, rgba(4, 3, 2, 0.08) 0 24%, rgba(4, 3, 2, 0.34) 68%, rgba(4, 3, 2, 0.74) 100%),
+      linear-gradient(90deg, rgba(4, 3, 2, 0.42), transparent 38%, transparent 62%, rgba(4, 3, 2, 0.42));
+  }
+
+  .scan-field {
+    opacity: 0.16;
+  }
+
   .matrix-header {
     min-height: auto;
-    padding: 14px;
+    gap: 8px;
+    padding: 10px;
   }
 
   .matrix-brand {
-    font-size: 1.24rem;
+    font-size: 1.14rem;
   }
 
   .matrix-brand small {
@@ -414,46 +481,123 @@ h1 em {
 
   .matrix-nav {
     width: 100%;
-    gap: 7px;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .matrix-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .matrix-nav a {
-    flex: 1;
-    min-height: 36px;
+    flex: 0 0 auto;
+    min-height: 32px;
     padding-inline: 8px;
-    font-size: 0.52rem;
+    font-size: 0.5rem;
   }
 
   .matrix-shell {
     min-height: 100svh;
-    padding: 126px 14px 18px;
+    padding: 98px 12px 14px;
   }
 
   .matrix-panel {
-    padding: 22px 18px;
+    max-height: 66svh;
+    overflow-y: auto;
+    padding: 16px 14px;
+    background:
+      linear-gradient(140deg, rgba(212, 170, 88, 0.08), transparent 36%),
+      linear-gradient(180deg, rgba(143, 7, 18, 0.13), transparent 48%),
+      rgba(8, 7, 5, 0.64);
+    box-shadow: 0 18px 70px rgba(0, 0, 0, 0.42), inset 0 0 34px rgba(212, 170, 88, 0.04);
+    backdrop-filter: blur(8px);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 170, 88, 0.45) transparent;
+  }
+
+  .matrix-panel::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .matrix-panel::-webkit-scrollbar-thumb {
+    background: rgba(212, 170, 88, 0.45);
   }
 
   .matrix-kicker {
-    font-size: 0.55rem;
+    margin-bottom: 10px;
+    font-size: 0.5rem;
+  }
+
+  .chapter-readout {
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 0.56rem;
+  }
+
+  .chapter-readout i {
+    width: 34px;
   }
 
   h1 {
-    font-size: clamp(3.1rem, 16vw, 5.1rem);
+    font-size: clamp(2.05rem, 11vw, 3.35rem);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
   }
 
   .matrix-copy {
-    font-size: 0.92rem;
+    margin-top: 11px;
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  .chapter-body {
+    gap: 8px;
+    margin-top: 11px;
   }
 
   .chapter-body ul {
     grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .chapter-body li,
+  .chapter-body p {
+    font-size: 0.76rem;
+    line-height: 1.4;
+  }
+
+  .chapter-body li,
+  .chip {
+    padding: 8px 9px;
+    background: rgba(5, 5, 5, 0.26);
+  }
+
+  .chapter-body strong,
+  .chip strong {
+    margin-bottom: 2px;
+    font-size: 0.93rem;
+  }
+
+  .chip {
+    font-size: 0.58rem;
+  }
+
+  .matrix-actions {
+    gap: 8px;
+    margin-top: 13px;
   }
 
   .matrix-actions button {
     flex: 1;
-    min-height: 43px;
+    min-height: 36px;
     padding-inline: 10px;
-    font-size: 0.58rem;
+    font-size: 0.5rem;
+  }
+
+  .matrix-panel::before,
+  .matrix-panel::after {
+    width: 30px;
   }
 }
 

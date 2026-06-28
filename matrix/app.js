@@ -1,5 +1,6 @@
 const canvas = document.getElementById("matrix-rain");
 const context = canvas.getContext("2d");
+const shell = document.querySelector(".matrix-shell");
 const panel = document.getElementById("matrix-panel");
 const kicker = document.getElementById("chapter-kicker");
 const chapterNumber = document.getElementById("chapter-number");
@@ -132,8 +133,10 @@ let activeIndex = 0;
 let depth = 0;
 let columns = [];
 let animationFrame = 0;
-let lastFrame = 0;
 let travelling = false;
+let travelStart = 0;
+let travelTimer = 0;
+let arriveTimer = 0;
 
 chapterTotal.textContent = String(chapters.length).padStart(2, "0");
 
@@ -145,52 +148,58 @@ function resizeCanvas() {
   canvas.style.height = `${window.innerHeight}px`;
   context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
-  const columnWidth = window.innerWidth < 680 ? 18 : 22;
-  const count = Math.ceil(window.innerWidth / columnWidth);
+  const isMobile = window.innerWidth < 680;
+  const columnWidth = isMobile ? 10 : window.innerWidth < 940 ? 13 : 16;
+  const count = Math.ceil(window.innerWidth / columnWidth) + 2;
   columns = Array.from({ length: count }, (_, index) => ({
-    x: index * columnWidth,
-    y: Math.random() * -window.innerHeight,
-    speed: reducedMotion ? 0.35 : 1.3 + Math.random() * 2.8,
-    size: window.innerWidth < 680 ? 13 + Math.random() * 5 : 15 + Math.random() * 7,
-    red: Math.random() > 0.72
+    x: index * columnWidth + Math.random() * 3,
+    offset: Math.random() * (window.innerHeight + 420),
+    speed: reducedMotion ? 0.2 : (isMobile ? 1.65 : 1.35) + Math.random() * (isMobile ? 2.4 : 2.1),
+    size: isMobile ? 10.5 + Math.random() * 3.8 : 12.5 + Math.random() * 5.2,
+    red: Math.random() > 0.66,
+    streams: isMobile ? 2 + Math.floor(Math.random() * 2) : 1 + Math.floor(Math.random() * 2),
+    gap: 120 + Math.random() * 260
   }));
 }
 
 function drawMatrix(time = 0) {
-  const delta = Math.min(42, time - lastFrame || 16);
-  lastFrame = time;
+  const travelPulse = travelStart ? Math.max(0, 1 - (time - travelStart) / 1450) : 0;
 
-  context.fillStyle = `rgba(4, 3, 2, ${reducedMotion ? 0.18 : 0.095})`;
+  context.fillStyle = `rgba(4, 3, 2, ${reducedMotion ? 0.18 : 0.062 + travelPulse * 0.048})`;
   context.fillRect(0, 0, window.innerWidth, window.innerHeight);
   context.font = "700 16px Consolas, monospace";
   context.textAlign = "center";
 
   const alphabet = "AI4ALL0123456789MAKEUSEFULMJ<>/{}[]PROMPTWORKFLOW";
-  const depthBoost = 1 + depth * 0.18;
+  const depthBoost = 1 + depth * 0.13 + travelPulse * 3.6;
 
   columns.forEach((column, columnIndex) => {
-    const trail = 8 + Math.floor(depth * 2);
-    for (let step = 0; step < trail; step += 1) {
-      const character = alphabet[(columnIndex * 13 + step * 7 + Math.floor(time / 90)) % alphabet.length];
-      const y = column.y - step * column.size * 1.2;
-      if (y < -30 || y > window.innerHeight + 30) continue;
+    const trail = 11 + Math.floor(depth * 1.35) + Math.floor(travelPulse * 14);
+    const spacing = column.size * 1.08;
+    const trailHeight = trail * spacing;
+    const cycle = window.innerHeight + trailHeight + column.gap;
+    const streamCount = column.streams + (travelPulse > 0.24 ? 1 : 0);
 
-      const alpha = Math.max(0, 1 - step / trail);
-      const isHead = step === 0;
-      context.font = `${isHead ? 900 : 700} ${column.size}px Consolas, monospace`;
-      context.fillStyle = column.red
-        ? `rgba(190, 23, 35, ${0.16 + alpha * 0.58})`
-        : `rgba(245, 217, 143, ${0.12 + alpha * 0.72})`;
-      context.shadowColor = column.red ? "rgba(190, 23, 35, 0.52)" : "rgba(212, 170, 88, 0.52)";
-      context.shadowBlur = isHead ? 16 : 4;
-      context.fillText(character, column.x, y);
-    }
+    for (let stream = 0; stream < streamCount; stream += 1) {
+      const streamOffset = column.offset + (cycle / streamCount) * stream;
+      const headY = ((streamOffset + time * column.speed * depthBoost * 0.085) % cycle) - 80;
 
-    column.y += column.speed * depthBoost * (delta / 16);
-    if (column.y - trail * column.size > window.innerHeight) {
-      column.y = Math.random() * -220;
-      column.speed = reducedMotion ? 0.35 : 1.3 + Math.random() * 2.8;
-      column.red = Math.random() > 0.72;
+      for (let step = 0; step < trail; step += 1) {
+        const characterTime = Math.floor(time / Math.max(44, 92 - depth * 4 - travelPulse * 24));
+        const character = alphabet[(columnIndex * 17 + stream * 23 + step * 7 + characterTime) % alphabet.length];
+        const y = headY - step * spacing;
+        if (y < -36 || y > window.innerHeight + 36) continue;
+
+        const alpha = Math.max(0, 1 - step / trail);
+        const isHead = step === 0;
+        context.font = `${isHead ? 900 : 700} ${column.size}px Consolas, monospace`;
+        context.fillStyle = column.red
+          ? `rgba(190, 23, 35, ${0.18 + alpha * (0.62 + travelPulse * 0.16)})`
+          : `rgba(245, 217, 143, ${0.14 + alpha * (0.76 + travelPulse * 0.18)})`;
+        context.shadowColor = column.red ? "rgba(190, 23, 35, 0.58)" : "rgba(212, 170, 88, 0.58)";
+        context.shadowBlur = isHead ? 18 + travelPulse * 16 : 4 + travelPulse * 5;
+        context.fillText(character, column.x, y);
+      }
     }
   });
 
@@ -198,38 +207,70 @@ function drawMatrix(time = 0) {
   animationFrame = window.requestAnimationFrame(drawMatrix);
 }
 
-function renderChapter(index, instant = false) {
+function applyChapter(index) {
   activeIndex = Math.max(0, Math.min(chapters.length - 1, index));
   depth = activeIndex;
   const chapter = chapters[activeIndex];
 
-  const apply = () => {
-    kicker.textContent = chapter.kicker;
-    chapterNumber.textContent = String(activeIndex + 1).padStart(2, "0");
-    title.innerHTML = chapter.title;
-    copy.textContent = chapter.copy;
-    body.innerHTML = chapter.body;
-    depthLabel.textContent = `DEPTH ${String(activeIndex).padStart(2, "0")}`;
-    consoleLine.textContent = chapter.console;
-    depthProgress.style.width = `${((activeIndex + 1) / chapters.length) * 100}%`;
-    prevButton.disabled = activeIndex === 0;
-    nextButton.textContent = activeIndex === 0
-      ? "Enter the code"
-      : activeIndex === chapters.length - 1
-        ? "Back to surface"
-        : "Travel deeper";
-    panel.classList.remove("is-travelling");
-    travelling = false;
-  };
+  kicker.textContent = chapter.kicker;
+  chapterNumber.textContent = String(activeIndex + 1).padStart(2, "0");
+  title.innerHTML = chapter.title;
+  copy.textContent = chapter.copy;
+  body.innerHTML = chapter.body;
+  depthLabel.textContent = `DEPTH ${String(activeIndex).padStart(2, "0")}`;
+  consoleLine.textContent = chapter.console;
+  depthProgress.style.width = `${((activeIndex + 1) / chapters.length) * 100}%`;
+  prevButton.disabled = activeIndex === 0;
+  nextButton.textContent = activeIndex === 0
+    ? "Enter the code"
+    : activeIndex === chapters.length - 1
+      ? "Back to surface"
+      : "Travel deeper";
+  window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+}
+
+function clearTravelTimers() {
+  window.clearTimeout(travelTimer);
+  window.clearTimeout(arriveTimer);
+}
+
+function renderChapter(index, instant = false) {
+  const targetIndex = Math.max(0, Math.min(chapters.length - 1, index));
+
+  if (targetIndex === activeIndex && !instant) return;
 
   if (instant || reducedMotion) {
-    apply();
+    clearTravelTimers();
+    panel.classList.remove("is-diving-out", "is-arriving");
+    shell.classList.remove("is-diving", "is-arriving");
+    travelStart = 0;
+    travelling = false;
+    applyChapter(targetIndex);
     return;
   }
 
+  clearTravelTimers();
   travelling = true;
-  panel.classList.add("is-travelling");
-  window.setTimeout(apply, 260);
+  travelStart = performance.now();
+  shell.classList.add("is-diving");
+  shell.classList.remove("is-arriving");
+  panel.classList.add("is-diving-out");
+  panel.classList.remove("is-arriving");
+
+  travelTimer = window.setTimeout(() => {
+    applyChapter(targetIndex);
+    panel.classList.remove("is-diving-out");
+    panel.classList.add("is-arriving");
+    shell.classList.remove("is-diving");
+    shell.classList.add("is-arriving");
+
+    arriveTimer = window.setTimeout(() => {
+      panel.classList.remove("is-arriving");
+      shell.classList.remove("is-arriving");
+      travelStart = 0;
+      travelling = false;
+    }, 620);
+  }, 980);
 }
 
 function goNext() {
