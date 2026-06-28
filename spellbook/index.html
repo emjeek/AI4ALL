@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore AI4ALL as a living spellbook of practical AI services, examples, and contact options with MJ Kemp.">
+  <meta name="theme-color" content="#050302">
+  <title>AI4ALL | Spellbook Version</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="spell-particles" aria-hidden="true"></canvas>
+  <div class="arcane-backdrop" aria-hidden="true"></div>
+  <div class="rune-aura" aria-hidden="true"></div>
+  <div class="ember-vignette" aria-hidden="true"></div>
+
+  <header class="spell-header">
+    <a class="spell-brand" href="/" aria-label="AI4ALL home">
+      <span>AI</span><b>4</b><span>ALL</span>
+      <small>spellbook route</small>
+    </a>
+
+    <nav class="spell-nav" aria-label="Website version navigation">
+      <a class="spell-cta" href="mailto:Ai4All.mj@gmail.com?subject=AI4ALL%20clarity%20call">Book a clarity call</a>
+      <details class="version-menu">
+        <summary class="version-menu-toggle" aria-label="Open website version menu">
+          <span class="hamburger-lines" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>Versions</span>
+        </summary>
+        <div class="version-menu-panel">
+          <a href="/">
+            <strong>Simple page</strong>
+            <small>Clear classic scroll</small>
+          </a>
+          <a href="/immersive/">
+            <strong>3D version</strong>
+            <small>Interactive WebGL network</small>
+          </a>
+          <a href="/matrix/">
+            <strong>Code version</strong>
+            <small>Matrix journey mode</small>
+          </a>
+          <a href="/terminal/">
+            <strong>Terminal version</strong>
+            <small>Guided command diagnostic</small>
+          </a>
+          <a href="/spellbook/" aria-current="page">
+            <strong>Spellbook version</strong>
+            <small>Living AI service grimoire</small>
+          </a>
+        </div>
+      </details>
+    </nav>
+  </header>
+
+  <main class="spell-stage">
+    <section class="spellbook-shell" aria-labelledby="spellbook-title">
+      <div class="book-runes" aria-hidden="true">
+        <i></i><i></i><i></i><i></i>
+      </div>
+
+      <article class="book-page spell-index">
+        <p class="spell-kicker">AI4ALL / Practical spells</p>
+        <h1 id="spellbook-title">Make AI <em>actually useful.</em></h1>
+        <p class="spell-intro">A living spellbook for turning confusing AI into plain-language help, useful prompts, cleaner workflows, and calmer teams.</p>
+
+        <div class="spell-list" id="spell-list" aria-label="Spell chapters"></div>
+
+        <p class="spell-note">Click a spell, use the arrow keys, or cast the next page to move through the book.</p>
+      </article>
+
+      <article class="book-page spell-detail" id="spell-detail" aria-live="polite">
+        <div class="spell-readout">
+          <span id="spell-number">01</span>
+          <i></i>
+          <span>ACTIVE SPELL</span>
+        </div>
+
+        <p class="spell-kicker" id="spell-subtitle">Find the first useful AI move.</p>
+        <h2 id="spell-title">Clarity Spell</h2>
+        <p class="spell-summary" id="spell-summary"></p>
+
+        <div class="spell-example">
+          <span>Real-world effect</span>
+          <p id="spell-example"></p>
+        </div>
+
+        <div class="spell-tags" id="spell-tags" aria-label="Spell traits"></div>
+
+        <div class="spell-actions">
+          <a class="spell-primary" id="spell-cta" href="mailto:Ai4All.mj@gmail.com?subject=AI4ALL%20clarity%20spell">Cast this spell</a>
+          <button type="button" id="prev-spell">Previous</button>
+          <button type="button" id="next-spell">Next spell</button>
+        </div>
+      </article>
+    </section>
+
+    <aside class="spell-help" aria-label="Spellbook controls">
+      <span>Controls</span>
+      <p>Arrow keys cycle spells. Escape closes the version menu. On mobile, use the rune buttons above the page.</p>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

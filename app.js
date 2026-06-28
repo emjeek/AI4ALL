@@ -124,6 +124,10 @@ if (year) year.textContent = new Date().getFullYear();
           <strong>Terminal version</strong>
           <small>Guided command diagnostic</small>
         </a>
+        <a href="/spellbook/">
+          <strong>Spellbook version</strong>
+          <small>Living AI service grimoire</small>
+        </a>
       </div>
     `;
     document.querySelector(".nav-links")?.append(versionMenu);
