@@ -80,6 +80,7 @@ button:disabled {
   z-index: 2;
   width: 100%;
   height: 100%;
+  opacity: 0.86;
 }
 
 .scene-backdrop {
@@ -123,8 +124,8 @@ button:disabled {
 }
 
 .smoke-layer {
-  opacity: 0.12;
-  filter: blur(28px);
+  opacity: 0.08;
+  filter: blur(18px);
   transform: translate3d(0, 0, 0);
 }
 
@@ -480,6 +481,7 @@ button:disabled {
   pointer-events: none;
   transform: translate(-50%, -48%) rotateX(64deg);
   transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .rune-ring,
@@ -663,7 +665,7 @@ button:disabled {
   background:
     radial-gradient(ellipse at center, var(--spell-soft), transparent 58%),
     radial-gradient(ellipse at center, var(--spell-haze), transparent 72%);
-  filter: blur(16px);
+  filter: blur(10px);
   transform: translateZ(-120px);
 }
 
@@ -678,6 +680,7 @@ button:disabled {
     translateZ(0);
   transform-style: preserve-3d;
   transition: transform 240ms ease;
+  will-change: transform;
 }
 
 .book-cover,
@@ -893,6 +896,7 @@ button:disabled {
     0 30px 80px rgba(0, 0, 0, 0.32);
   overflow: hidden;
   transform-style: preserve-3d;
+  contain: layout paint;
 }
 
 .book-page::before {
@@ -1371,6 +1375,7 @@ h2 em {
   box-shadow:
     inset 0 0 48px rgba(245, 217, 143, 0.06),
     0 0 34px rgba(190, 23, 35, 0.16);
+  will-change: transform, box-shadow;
 }
 
 .cast-button::before,
@@ -1620,13 +1625,13 @@ h2 em {
 .grimoire-scene.is-casting .rune-ring-one,
 .grimoire-scene.is-casting .rune-ring-three {
   animation-duration: 2.1s;
-  filter: brightness(1.8);
+  opacity: 0.92;
 }
 
 .grimoire-scene.is-casting .rune-ring-two,
 .grimoire-scene.is-casting .rune-ring-four {
   animation-duration: 1.7s;
-  filter: brightness(1.6);
+  opacity: 0.86;
 }
 
 .grimoire-scene.is-casting .sigil-core {
@@ -1724,7 +1729,6 @@ h2 em {
 @keyframes page-turn-forward {
   0% {
     opacity: 0;
-    filter: brightness(1);
     transform: rotateY(0deg) translateZ(22px);
   }
 
@@ -1733,7 +1737,6 @@ h2 em {
   }
 
   50% {
-    filter: brightness(1.45);
     transform: rotateY(-92deg) translateZ(40px);
   }
 
@@ -1743,7 +1746,6 @@ h2 em {
 
   100% {
     opacity: 0;
-    filter: brightness(1);
     transform: rotateY(-176deg) translateZ(14px);
   }
 }
@@ -1751,7 +1753,6 @@ h2 em {
 @keyframes page-turn-back {
   0% {
     opacity: 0;
-    filter: brightness(1);
     transform: rotateY(0deg) translateZ(22px);
   }
 
@@ -1760,7 +1761,6 @@ h2 em {
   }
 
   50% {
-    filter: brightness(1.45);
     transform: rotateY(92deg) translateZ(40px);
   }
 
@@ -1770,7 +1770,6 @@ h2 em {
 
   100% {
     opacity: 0;
-    filter: brightness(1);
     transform: rotateY(176deg) translateZ(14px);
   }
 }
@@ -1778,7 +1777,7 @@ h2 em {
 @keyframes content-fade-out {
   to {
     opacity: 0;
-    filter: blur(10px);
+    filter: blur(4px);
     transform: translateY(12px);
   }
 }
@@ -1786,7 +1785,7 @@ h2 em {
 @keyframes ink-rise {
   from {
     opacity: 0;
-    filter: blur(12px);
+    filter: blur(4px);
     transform: translateY(18px);
   }
 
@@ -1800,7 +1799,6 @@ h2 em {
 @keyframes book-cast-lift {
   0%,
   100% {
-    filter: brightness(1);
     transform:
       rotateX(var(--book-tilt-x))
       rotateY(var(--book-tilt-y))
@@ -1808,7 +1806,6 @@ h2 em {
   }
 
   36% {
-    filter: brightness(1.38);
     transform:
       rotateX(calc(var(--book-tilt-x) - 2deg))
       rotateY(var(--book-tilt-y))
@@ -1818,7 +1815,6 @@ h2 em {
   }
 
   64% {
-    filter: brightness(1.08);
     transform:
       rotateX(calc(var(--book-tilt-x) + 1deg))
       rotateY(var(--book-tilt-y))
@@ -1831,12 +1827,10 @@ h2 em {
 @keyframes sigil-flare {
   0%,
   100% {
-    filter: brightness(1);
     transform: translate(-50%, -50%) rotateX(-64deg) scale(1);
   }
 
   38% {
-    filter: brightness(2.2);
     transform: translate(-50%, -50%) rotateX(-64deg) scale(1.18);
   }
 }
@@ -1844,11 +1838,10 @@ h2 em {
 @keyframes cast-button-surge {
   0%,
   100% {
-    filter: brightness(1);
+    opacity: 1;
   }
 
   35% {
-    filter: brightness(1.85);
     box-shadow:
       inset 0 0 80px rgba(245, 217, 143, 0.16),
       0 0 52px rgba(245, 217, 143, 0.42),
@@ -1860,13 +1853,13 @@ h2 em {
   0%,
   100% {
     opacity: 0.7;
-    filter: blur(16px);
+    filter: blur(10px);
     transform: translateZ(-120px) scale(1);
   }
 
   40% {
     opacity: 1;
-    filter: blur(10px);
+    filter: blur(6px);
     transform: translateZ(-120px) scale(1.14);
   }
 }
@@ -1934,6 +1927,23 @@ h2 em {
 }
 
 @media (max-width: 940px) {
+  #spell-fx {
+    opacity: 0.7;
+  }
+
+  .void-glow,
+  .smoke-layer {
+    animation: none;
+  }
+
+  .smoke-layer {
+    display: none;
+  }
+
+  .star-grid {
+    opacity: 0.16;
+  }
+
   .spell-header {
     align-items: flex-start;
     flex-direction: column;
@@ -1997,6 +2007,14 @@ h2 em {
 }
 
 @media (max-width: 680px) {
+  #spell-fx {
+    opacity: 0.58;
+  }
+
+  .floor-light {
+    opacity: 0.55;
+  }
+
   .spell-header {
     min-height: auto;
     gap: 8px;

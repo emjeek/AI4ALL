@@ -24,6 +24,8 @@ const castButtonSmall = document.getElementById("cast-button-small");
 const spellResult = document.getElementById("spell-result");
 const spellSearch = document.getElementById("spell-search");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const weakHardware = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4)
+  || (navigator.deviceMemory && navigator.deviceMemory <= 4);
 
 const spells = [
   {
@@ -223,6 +225,83 @@ let rings = [];
 let glyphs = [];
 let threads = [];
 let lastPointer = { x: 0.5, y: 0.5 };
+let pointerFrame = 0;
+let pendingPointer = null;
+let resizeTimer = 0;
+let lastFrameTime = 0;
+let bookCenter = { x: 0, y: 0 };
+
+function getEffectProfile() {
+  const mobile = width < 680;
+  const tablet = width < 940;
+  const constrained = reducedMotion || weakHardware || mobile;
+
+  if (reducedMotion) {
+    return {
+      pixelRatio: 1,
+      motes: 30,
+      threads: 0,
+      pageDust: 0,
+      castBurst: 0,
+      glyphBurst: 0,
+      liveSparkChance: 0,
+      liveGlyphChance: 0,
+      maxSparks: 0,
+      maxGlyphs: 0,
+      maxRings: 0,
+      ambientShadows: false
+    };
+  }
+
+  if (constrained) {
+    return {
+      pixelRatio: 1.1,
+      motes: 54,
+      threads: 0,
+      pageDust: 16,
+      castBurst: 42,
+      glyphBurst: 6,
+      liveSparkChance: 0.14,
+      liveGlyphChance: 0.04,
+      maxSparks: 90,
+      maxGlyphs: 12,
+      maxRings: 4,
+      ambientShadows: false
+    };
+  }
+
+  if (tablet) {
+    return {
+      pixelRatio: 1.25,
+      motes: 88,
+      threads: 6,
+      pageDust: 24,
+      castBurst: 62,
+      glyphBurst: 10,
+      liveSparkChance: 0.22,
+      liveGlyphChance: 0.07,
+      maxSparks: 130,
+      maxGlyphs: 20,
+      maxRings: 5,
+      ambientShadows: false
+    };
+  }
+
+  return {
+    pixelRatio: 1.4,
+    motes: 125,
+    threads: 11,
+    pageDust: 30,
+    castBurst: 78,
+    glyphBurst: 13,
+    liveSparkChance: 0.28,
+    liveGlyphChance: 0.08,
+    maxSparks: 180,
+    maxGlyphs: 28,
+    maxRings: 7,
+    ambientShadows: true
+  };
+}
 
 function buildSpellList() {
   spells.forEach((spell, index) => {
@@ -332,6 +411,7 @@ function renderSpell(index, instant = false) {
 function turnTo(index, direction = 1) {
   if (isTurning || isCasting) return;
   const target = (index + spells.length) % spells.length;
+  updateBookCenter();
 
   if (target === activeIndex) {
     castActiveSpell();
@@ -377,6 +457,8 @@ function castActiveSpell() {
   if (isCasting || isTurning) return;
 
   const spell = spells[activeIndex];
+  const profile = getEffectProfile();
+  updateBookCenter();
   isCasting = true;
   scene.classList.remove("is-casting");
   void scene.offsetWidth;
@@ -395,8 +477,8 @@ function castActiveSpell() {
     setCharge(Math.round(eased * 100));
 
     if (!reducedMotion && progress > 0.16 && progress < 0.92) {
-      if (Math.random() < 0.48) emitSpark(spell, 1 + progress * 2);
-      if (Math.random() < 0.18) emitGlyph(spell);
+      if (Math.random() < profile.liveSparkChance) emitSpark(spell, 0.85 + progress * 1.6);
+      if (Math.random() < profile.liveGlyphChance) emitGlyph(spell);
     }
 
     if (progress < 1) {
@@ -466,19 +548,20 @@ function closeVersionMenus(except = null) {
 }
 
 function resizeCanvas() {
-  pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
   width = window.innerWidth;
   height = window.innerHeight;
+  const profile = getEffectProfile();
+  pixelRatio = Math.min(window.devicePixelRatio || 1, profile.pixelRatio);
   canvas.width = Math.floor(width * pixelRatio);
   canvas.height = Math.floor(height * pixelRatio);
   canvas.style.width = `${width}px`;
   canvas.style.height = `${height}px`;
   context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
   updateRuneRadius();
+  updateBookCenter();
 
-  const moteCount = width < 680 ? 120 : 220;
-  motes = Array.from({ length: moteCount }, createMote);
-  threads = Array.from({ length: width < 680 ? 12 : 22 }, createThread);
+  motes = Array.from({ length: profile.motes }, createMote);
+  threads = Array.from({ length: profile.threads }, createThread);
 }
 
 function createMote() {
@@ -509,10 +592,11 @@ function createThread() {
 function emitPageDust(direction) {
   if (reducedMotion) return;
   const spell = spells[activeIndex];
+  const profile = getEffectProfile();
   const originX = direction >= 0 ? width * 0.58 : width * 0.42;
   const originY = height * 0.48;
 
-  for (let i = 0; i < 46; i += 1) {
+  for (let i = 0; i < profile.pageDust; i += 1) {
     sparks.push({
       x: originX + (-40 + Math.random() * 80),
       y: originY + (-120 + Math.random() * 240),
@@ -535,6 +619,7 @@ function emitPageDust(direction) {
     alpha: 0.5,
     color: spell.hot
   });
+  trimEffects();
 }
 
 function emitSpark(spell, power = 1) {
@@ -550,6 +635,7 @@ function emitSpark(spell, power = 1) {
     ttl: 520 + Math.random() * 680,
     color: Math.random() > 0.36 ? spell.hot : spell.red
   });
+  trimEffects();
 }
 
 function emitGlyph(spell) {
@@ -567,15 +653,17 @@ function emitGlyph(spell) {
     ttl: 900 + Math.random() * 520,
     color: Math.random() > 0.4 ? spell.hot : spell.red
   });
+  trimEffects();
 }
 
 function emitCastBurst(spell) {
   if (reducedMotion) return;
+  const profile = getEffectProfile();
   const center = getBookCenter();
 
-  for (let i = 0; i < 118; i += 1) {
-    const angle = (Math.PI * 2 * i) / 118 + Math.random() * 0.18;
-    const speed = 2.2 + Math.random() * 6.4;
+  for (let i = 0; i < profile.castBurst; i += 1) {
+    const angle = (Math.PI * 2 * i) / profile.castBurst + Math.random() * 0.18;
+    const speed = 1.8 + Math.random() * 5.2;
     sparks.push({
       x: center.x,
       y: center.y,
@@ -589,7 +677,7 @@ function emitCastBurst(spell) {
     });
   }
 
-  for (let i = 0; i < 4; i += 1) {
+  for (let i = 0; i < Math.min(3, profile.maxRings); i += 1) {
     rings.push({
       x: center.x,
       y: center.y,
@@ -602,38 +690,66 @@ function emitCastBurst(spell) {
     });
   }
 
-  for (let i = 0; i < 22; i += 1) {
-    window.setTimeout(() => emitGlyph(spell), i * 28);
+  for (let i = 0; i < profile.glyphBurst; i += 1) {
+    window.setTimeout(() => emitGlyph(spell), i * 38);
   }
+  trimEffects();
 }
 
-function getBookCenter() {
+function updateBookCenter() {
   const rect = bookObject.getBoundingClientRect();
-  return {
+  bookCenter = {
     x: rect.left + rect.width * 0.5,
     y: rect.top + rect.height * 0.54
   };
+  return bookCenter;
+}
+
+function getBookCenter() {
+  if (!bookCenter.x && !bookCenter.y) return updateBookCenter();
+  return bookCenter;
+}
+
+function trimEffects() {
+  const profile = getEffectProfile();
+  if (sparks.length > profile.maxSparks) {
+    sparks.splice(0, sparks.length - profile.maxSparks);
+  }
+  if (glyphs.length > profile.maxGlyphs) {
+    glyphs.splice(0, glyphs.length - profile.maxGlyphs);
+  }
+  if (rings.length > profile.maxRings) {
+    rings.splice(0, rings.length - profile.maxRings);
+  }
 }
 
 function draw(time = 0) {
+  if (document.hidden) {
+    animationFrame = 0;
+    return;
+  }
+
+  const elapsed = lastFrameTime ? Math.min(34, time - lastFrameTime) : 16.7;
+  const delta = elapsed / 16.7;
+  lastFrameTime = time;
   context.clearRect(0, 0, width, height);
   context.globalCompositeOperation = "lighter";
 
-  drawThreads(time);
-  drawMotes(time);
-  drawRings();
-  drawSparks();
-  drawGlyphs();
+  drawThreads(time, delta);
+  drawMotes(time, delta);
+  drawRings(elapsed, delta);
+  drawSparks(elapsed, delta);
+  drawGlyphs(elapsed, delta);
 
   context.globalCompositeOperation = "source-over";
   animationFrame = window.requestAnimationFrame(draw);
 }
 
-function drawThreads(time) {
+function drawThreads(time, delta) {
   const spell = spells[activeIndex];
   threads.forEach((thread) => {
-    thread.y -= thread.speed;
-    thread.x += Math.sin(time * 0.0004 + thread.phase) * 0.18;
+    thread.y -= thread.speed * delta;
+    thread.x += Math.sin(time * 0.0004 + thread.phase) * 0.18 * delta;
     if (thread.y < -thread.length) {
       Object.assign(thread, createThread(), { y: height + thread.length });
     }
@@ -651,11 +767,12 @@ function drawThreads(time) {
   });
 }
 
-function drawMotes(time) {
+function drawMotes(time, delta) {
+  const profile = getEffectProfile();
   motes.forEach((mote) => {
-    mote.x += mote.vx + Math.sin(time * 0.0008 + mote.pulse) * 0.06;
-    mote.y += mote.vy;
-    mote.pulse += 0.018;
+    mote.x += (mote.vx + Math.sin(time * 0.0008 + mote.pulse) * 0.06) * delta;
+    mote.y += mote.vy * delta;
+    mote.pulse += 0.018 * delta;
 
     if (mote.y < -16 || mote.x < -16 || mote.x > width + 16) {
       Object.assign(mote, createMote(), { y: height + 16 });
@@ -664,18 +781,20 @@ function drawMotes(time) {
     const pulse = 0.65 + Math.sin(mote.pulse) * 0.35;
     context.beginPath();
     context.fillStyle = rgba(mote.color, mote.alpha * pulse);
-    context.shadowColor = rgba(mote.color, 0.55);
-    context.shadowBlur = 14;
+    if (profile.ambientShadows) {
+      context.shadowColor = rgba(mote.color, 0.35);
+      context.shadowBlur = 10;
+    }
     context.arc(mote.x, mote.y, mote.radius * (0.8 + pulse), 0, Math.PI * 2);
     context.fill();
   });
   context.shadowBlur = 0;
 }
 
-function drawRings() {
+function drawRings(elapsed, delta) {
   rings = rings.filter((ring) => {
-    ring.life += 16.7;
-    ring.radius += ring.speed;
+    ring.life += elapsed;
+    ring.radius += ring.speed * delta;
     const progress = ring.life / ring.ttl;
     if (progress >= 1) return false;
 
@@ -691,15 +810,15 @@ function drawRings() {
   context.shadowBlur = 0;
 }
 
-function drawSparks() {
+function drawSparks(elapsed, delta) {
   sparks = sparks.filter((spark) => {
-    spark.life += 16.7;
+    spark.life += elapsed;
     const progress = spark.life / spark.ttl;
     if (progress >= 1) return false;
 
-    spark.x += spark.vx;
-    spark.y += spark.vy;
-    spark.vy += spark.gravity || 0;
+    spark.x += spark.vx * delta;
+    spark.y += spark.vy * delta;
+    spark.vy += (spark.gravity || 0) * delta;
     spark.vx *= 0.992;
 
     const alpha = 1 - progress;
@@ -721,17 +840,17 @@ function drawSparks() {
   context.shadowBlur = 0;
 }
 
-function drawGlyphs() {
+function drawGlyphs(elapsed, delta) {
   context.textAlign = "center";
   context.textBaseline = "middle";
   glyphs = glyphs.filter((glyph) => {
-    glyph.life += 16.7;
+    glyph.life += elapsed;
     const progress = glyph.life / glyph.ttl;
     if (progress >= 1) return false;
 
-    glyph.x += glyph.vx;
-    glyph.y += glyph.vy;
-    glyph.rotation += 0.004;
+    glyph.x += glyph.vx * delta;
+    glyph.y += glyph.vy * delta;
+    glyph.rotation += 0.004 * delta;
     const alpha = Math.sin(Math.PI * progress);
 
     context.save();
@@ -764,22 +883,49 @@ function easeOutCubic(value) {
 }
 
 function handlePointerMove(event) {
-  if (window.innerWidth < 940 || reducedMotion) return;
+  if (window.innerWidth < 1120 || reducedMotion || weakHardware) return;
+  pendingPointer = { x: event.clientX, y: event.clientY };
+  if (pointerFrame) return;
+  pointerFrame = window.requestAnimationFrame(applyPointerTilt);
+}
+
+function applyPointerTilt() {
+  pointerFrame = 0;
+  if (!pendingPointer) return;
   const rect = bookObject.getBoundingClientRect();
-  const x = (event.clientX - rect.left) / rect.width;
-  const y = (event.clientY - rect.top) / rect.height;
+  const x = (pendingPointer.x - rect.left) / rect.width;
+  const y = (pendingPointer.y - rect.top) / rect.height;
   lastPointer = { x, y };
-  const tiltY = (x - 0.5) * 8;
-  const tiltX = (0.5 - y) * 5;
+  const tiltY = (x - 0.5) * 4.2;
+  const tiltX = (0.5 - y) * 2.8;
   scene.style.setProperty("--book-tilt-y", `${tiltY.toFixed(2)}deg`);
   scene.style.setProperty("--book-tilt-x", `${tiltX.toFixed(2)}deg`);
 }
 
 function calmBookTilt() {
-  if (window.innerWidth < 940 || reducedMotion) return;
+  if (window.innerWidth < 1120 || reducedMotion || weakHardware) return;
+  if (pointerFrame) {
+    window.cancelAnimationFrame(pointerFrame);
+    pointerFrame = 0;
+  }
+  pendingPointer = null;
   lastPointer = { x: 0.5, y: 0.5 };
   scene.style.setProperty("--book-tilt-y", "0deg");
   scene.style.setProperty("--book-tilt-x", "0deg");
+}
+
+function scheduleResize() {
+  window.clearTimeout(resizeTimer);
+  resizeTimer = window.setTimeout(() => {
+    resizeCanvas();
+    lastFrameTime = 0;
+  }, 120);
+}
+
+function resumeAnimation() {
+  if (animationFrame || document.hidden) return;
+  lastFrameTime = 0;
+  animationFrame = window.requestAnimationFrame(draw);
 }
 
 prevSpell.addEventListener("click", previous);
@@ -831,7 +977,8 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-window.addEventListener("resize", resizeCanvas);
+window.addEventListener("resize", scheduleResize);
+document.addEventListener("visibilitychange", resumeAnimation);
 
 buildSpellList();
 buildRuneOrbit();
@@ -841,4 +988,6 @@ animationFrame = window.requestAnimationFrame(draw);
 
 window.addEventListener("beforeunload", () => {
   window.cancelAnimationFrame(animationFrame);
+  window.cancelAnimationFrame(pointerFrame);
+  window.clearTimeout(resizeTimer);
 });
