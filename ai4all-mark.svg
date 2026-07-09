@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 182" role="img" aria-labelledby="title">
+  <title>AI4ALL</title>
+  <defs>
+    <linearGradient id="gold" x1="12" y1="12" x2="292" y2="172" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7c5825"/>
+      <stop offset="0.16" stop-color="#f8df99"/>
+      <stop offset="0.34" stop-color="#b07a34"/>
+      <stop offset="0.52" stop-color="#ffe7a7"/>
+      <stop offset="0.7" stop-color="#b87d33"/>
+      <stop offset="1" stop-color="#f0cf7b"/>
+    </linearGradient>
+    <linearGradient id="gold-stroke" x1="0" y1="0" x2="0" y2="182" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffe7a7"/>
+      <stop offset="1" stop-color="#8a5e28"/>
+    </linearGradient>
+    <linearGradient id="red" x1="176" y1="0" x2="296" y2="134" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d21927"/>
+      <stop offset="0.46" stop-color="#a90014"/>
+      <stop offset="1" stop-color="#680006"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-12%" width="124%" height="130%">
+      <feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#000000" flood-opacity="0.45"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#f3c56f" flood-opacity="0.24"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)" stroke-linejoin="round">
+    <g fill="url(#gold)" stroke="url(#gold-stroke)" stroke-width="1.15">
+      <path fill-rule="evenodd" d="M8 76 38 4h43l30 72H81l-6-16H43l-6 16H8Zm44-34h15L59 19 52 42Z"/>
+      <path d="M132 4h30v72h-30z"/>
+      <path fill-rule="evenodd" d="M8 178l30-72h43l30 72H81l-6-16H43l-6 16H8Zm44-34h15l-8-23-7 23Z"/>
+      <path d="M132 106h30v48h54v24h-84z"/>
+      <path d="M218 106h30v48h62v24h-92z"/>
+    </g>
+    <path fill="url(#red)" stroke="#c31a24" stroke-width="1.15" d="M242 4h44l-54 80h42V54h33v30h21v30h-21v30h-35v-30H164V84L242 4Zm-29 80h59V22L213 84Z"/>
+  </g>
+</svg>
