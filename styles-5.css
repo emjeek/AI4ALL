@@ -3,7 +3,7 @@
   width: min(100%, 320px);
   height: 196px;
   margin-bottom: 10px;
-  background: url("ai4all-mark.svg") center / contain no-repeat;
+  background: url("ai4all-mark.svg?v=2") center / contain no-repeat;
   filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 18px rgba(212, 170, 88, 0.16));
 }
 

@@ -31,6 +31,6 @@
       <path d="M132 106h30v48h54v24h-84z"/>
       <path d="M218 106h30v48h62v24h-92z"/>
     </g>
-    <path fill="url(#red)" d="M242 4h44v50h20v30h2v32h-2v28h-34v-28H164V84h20L242 4Z"/>
+    <path fill="url(#red)" stroke="#c31a24" stroke-width="1.15" fill-rule="evenodd" d="M242 4h44l-54 80h42V54h33v30h21v30h-21v30h-35v-30H164V84L242 4ZM216 84h58V27l-58 57Z"/>
   </g>
 </svg>
