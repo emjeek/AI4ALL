@@ -31,6 +31,6 @@
       <path d="M132 106h30v48h54v24h-84z"/>
       <path d="M218 106h30v48h62v24h-92z"/>
     </g>
-    <text x="157" y="145" fill="url(#red)" stroke="#c31a24" stroke-width="1.15" paint-order="stroke fill" font-family="'Arial Black', Arial, Helvetica, sans-serif" font-size="190" font-weight="900">4</text>
+    <path fill="url(#red)" d="M242 4h44v50h20v30h2v32h-2v28h-34v-28H164V84h20L242 4Z"/>
   </g>
 </svg>
