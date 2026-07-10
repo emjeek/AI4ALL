@@ -146,7 +146,12 @@ section {
 
   .circuit-board {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100lvh;
+    transform: translateX(-50%);
     opacity: 1;
     background-image:
       linear-gradient(180deg, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0.24) 42%, rgba(0, 0, 0, 0.64)),
@@ -155,7 +160,8 @@ section {
       url("mobile-circuit-bg.webp?v=1");
     background-position: center top;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: auto 100vh;
+    background-size: auto 100lvh;
     filter: saturate(1.12) contrast(1.18) brightness(1.08);
     mask-image: none;
   }
@@ -169,10 +175,10 @@ section {
 }
 
 :root {
-  --gold: #d0a142;
-  --gold-bright: #ffe28a;
-  --gold-soft: #9a651f;
-  --metallic-gold: linear-gradient(112deg, #7a4a15 0%, #c4882e 13%, #f7d46f 26%, #fff2b4 36%, #d59a34 49%, #91601e 61%, #e4b24b 74%, #fff6bd 84%, #b67925 100%);
+  --gold: #e0a52a;
+  --gold-bright: #ffcf3f;
+  --gold-soft: #a66508;
+  --metallic-gold: linear-gradient(112deg, #5d3100 0%, #a76005 11%, #df950d 22%, #ffd34a 32%, #fff2a8 39%, #f0ad18 48%, #9b5a05 59%, #d88607 69%, #ffc928 79%, #fff7bd 87%, #b56d07 100%);
 }
 
 h1 em,
@@ -185,15 +191,15 @@ h2 span,
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  -webkit-text-stroke: 0.35px rgba(255, 226, 138, 0.28);
+  -webkit-text-stroke: 0.35px rgba(255, 207, 63, 0.34);
   text-shadow:
-    0 1px 0 rgba(76, 43, 10, 0.55),
-    0 0 16px rgba(216, 156, 48, 0.26),
-    0 0 32px rgba(255, 218, 119, 0.14);
+    0 1px 0 rgba(61, 31, 0, 0.6),
+    0 0 13px rgba(255, 187, 31, 0.26),
+    0 0 28px rgba(255, 207, 63, 0.15);
 }
 
 h1 em {
-  filter: saturate(1.16) contrast(1.14) brightness(1.08);
+  filter: saturate(1.34) contrast(1.18) brightness(1.06);
 }
 
 .eyebrow,
