@@ -136,7 +136,34 @@ section {
   }
 
   .shell {
-    width: min(100%, calc(100vw - 28px));
+    width: min(100%, calc(100vw - 44px));
+  }
+
+  .nav {
+    gap: 10px;
+  }
+
+  .logo {
+    font-size: 1.32rem;
+    letter-spacing: 0.09em;
+  }
+
+  .button-small {
+    min-height: 38px;
+    padding-inline: 12px;
+    font-size: 0.66rem;
+  }
+
+  .hero {
+    padding: 58px 0 58px;
+  }
+
+  .hero-grid {
+    gap: 30px;
+  }
+
+  section {
+    padding: 68px 0;
   }
 
   .eyebrow,
@@ -167,6 +194,11 @@ section {
 
   h1 {
     font-size: clamp(3.6rem, 18vw, 5.4rem);
+  }
+
+  h2 {
+    font-size: clamp(2.15rem, 10.6vw, 3rem);
+    line-height: 1.03;
   }
 
   .button {
