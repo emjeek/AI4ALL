@@ -32,14 +32,16 @@ h1 em {
 }
 
 .hero-ai-red {
-  background: linear-gradient(135deg, #72030c 0%, #b60918 42%, #e01827 72%, #8a040f 100%);
+  background: linear-gradient(135deg, #6a020a 0%, #a10512 38%, #d20d1d 68%, #79020c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  -webkit-text-stroke: 0.45px rgba(245, 217, 143, 0.38);
   text-shadow:
-    0 1px 0 rgba(45, 0, 5, 0.68),
-    0 0 18px rgba(190, 23, 35, 0.28),
-    0 0 34px rgba(143, 7, 18, 0.18);
+    0.7px 0 rgba(245, 217, 143, 0.18),
+    -0.7px 0 rgba(245, 217, 143, 0.12),
+    0 1px 0 rgba(45, 0, 5, 0.66),
+    0 0 12px rgba(190, 23, 35, 0.22);
 }
 
 main > section:first-child h2 {
