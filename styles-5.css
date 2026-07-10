@@ -31,6 +31,11 @@ h1 em {
     0 0 12px rgba(212, 170, 88, 0.12);
 }
 
+main > section:first-child h2 {
+  font-size: clamp(3rem, 6.6vw, 5.7rem);
+  max-width: 850px;
+}
+
 .hero-logo-image .stack-ai,
 .hero-logo-image .stack-four,
 .hero-logo-image .stack-all {
@@ -197,8 +202,12 @@ section {
   }
 
   h2 {
-    font-size: clamp(2.15rem, 10.6vw, 3rem);
+    font-size: clamp(2.45rem, 11.4vw, 3.45rem);
     line-height: 1.03;
+  }
+
+  main > section:first-child h2 {
+    font-size: clamp(2.7rem, 12.6vw, 3.85rem);
   }
 
   .button {
@@ -215,15 +224,15 @@ section {
     transform: translateX(-50%);
     opacity: 1;
     background-image:
-      linear-gradient(180deg, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0.24) 42%, rgba(0, 0, 0, 0.64)),
-      radial-gradient(circle at 50% 18%, rgba(212, 170, 88, 0.18), transparent 18rem),
-      radial-gradient(circle at 80% 62%, rgba(143, 7, 18, 0.16), transparent 21rem),
-      url("mobile-circuit-bg.webp?v=1");
+      linear-gradient(180deg, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.30) 42%, rgba(0, 0, 0, 0.68)),
+      radial-gradient(circle at 50% 18%, rgba(212, 170, 88, 0.14), transparent 18rem),
+      radial-gradient(circle at 80% 62%, rgba(143, 7, 18, 0.15), transparent 21rem),
+      url("mobile-circuit-bg.webp?v=2");
     background-position: center top;
     background-repeat: no-repeat;
     background-size: auto 100vh;
     background-size: auto 100lvh;
-    filter: saturate(1.12) contrast(1.18) brightness(1.08);
+    filter: saturate(1.08) contrast(1.14) brightness(0.98);
     mask-image: none;
   }
 
