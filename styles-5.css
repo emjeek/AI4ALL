@@ -32,16 +32,28 @@ h1 em {
 }
 
 .hero-ai-red {
+  position: relative;
+  display: inline-block;
   background: linear-gradient(135deg, #6a020a 0%, #a10512 38%, #d20d1d 68%, #79020c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  -webkit-text-stroke: 0.45px rgba(245, 217, 143, 0.38);
   text-shadow:
-    0.7px 0 rgba(245, 217, 143, 0.18),
-    -0.7px 0 rgba(245, 217, 143, 0.12),
     0 1px 0 rgba(45, 0, 5, 0.66),
-    0 0 12px rgba(190, 23, 35, 0.22);
+    0 0 10px rgba(190, 23, 35, 0.24);
+}
+
+.hero-ai-red::before {
+  position: absolute;
+  inset: -0.05em -0.04em -0.04em;
+  z-index: -1;
+  content: "AI";
+  color: rgba(245, 217, 143, 0.34);
+  filter: blur(3.5px);
+  pointer-events: none;
+  text-shadow:
+    0 0 10px rgba(245, 217, 143, 0.2),
+    0 0 18px rgba(212, 170, 88, 0.14);
 }
 
 main > section:first-child h2 {
