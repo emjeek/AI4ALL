@@ -227,7 +227,7 @@ section {
       linear-gradient(180deg, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.30) 42%, rgba(0, 0, 0, 0.68)),
       radial-gradient(circle at 50% 18%, rgba(212, 170, 88, 0.14), transparent 18rem),
       radial-gradient(circle at 80% 62%, rgba(143, 7, 18, 0.15), transparent 21rem),
-      url("mobile-circuit-bg.webp?v=2");
+      url("mobile-circuit-bg.webp?v=3");
     background-position: center top;
     background-repeat: no-repeat;
     background-size: auto 100vh;
