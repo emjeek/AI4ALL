@@ -8,6 +8,10 @@
 }
 
 h1 em {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  margin-right: -0.14em;
+  padding-right: 0.14em;
   background: linear-gradient(
     112deg,
     #8c692f 0%,
@@ -45,6 +49,11 @@ h1 em {
     width: min(100%, 392px);
     height: min(78vw, 392px);
     margin: -24px auto 8px;
+  }
+
+  h1 em {
+    font-size: 0.95em;
+    line-height: 1;
   }
 }
 
