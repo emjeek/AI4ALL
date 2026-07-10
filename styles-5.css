@@ -27,3 +27,111 @@
     margin-top: -16px;
   }
 }
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+main,
+.site-header,
+footer,
+section {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.hero {
+  overflow: hidden;
+}
+
+.hero::after {
+  pointer-events: none;
+}
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+}
+
+@media (max-width: 720px) {
+  html,
+  body {
+    overscroll-behavior-x: none;
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .site-header {
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  .hero::after {
+    right: 50%;
+    width: min(34rem, 118vw);
+    height: min(34rem, 118vw);
+    transform: translateX(50%);
+  }
+
+  .actions,
+  .shell,
+  .nav,
+  .hero-grid,
+  .hero-grid > *,
+  .section-head,
+  .section-head > *,
+  .route-map-grid,
+  .route-map-grid > *,
+  .useful-grid,
+  .useful-grid > *,
+  .personal-grid,
+  .personal-grid > *,
+  .faq-grid,
+  .faq-grid > *,
+  .cta-grid,
+  .cta-grid > *,
+  .button,
+  .hero-card,
+  .route-console,
+  .process-grid,
+  .services-grid,
+  .faq-list,
+  .contact-card {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .shell {
+    width: min(100%, calc(100vw - 28px));
+  }
+
+  .eyebrow,
+  .scroll-note {
+    flex-wrap: wrap;
+    overflow-wrap: anywhere;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  .hero-copy,
+  .section-intro,
+  .personal-copy {
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+
+  h1 {
+    font-size: clamp(3.6rem, 18vw, 5.4rem);
+  }
+
+  .button {
+    white-space: normal;
+  }
+}
