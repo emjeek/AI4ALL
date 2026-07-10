@@ -167,3 +167,41 @@ section {
       linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.16));
   }
 }
+
+:root {
+  --gold: #d0a142;
+  --gold-bright: #ffe28a;
+  --gold-soft: #9a651f;
+  --metallic-gold: linear-gradient(112deg, #7a4a15 0%, #c4882e 13%, #f7d46f 26%, #fff2b4 36%, #d59a34 49%, #91601e 61%, #e4b24b 74%, #fff6bd 84%, #b67925 100%);
+}
+
+h1 em,
+h2 span,
+.plain-statement span,
+.gold,
+.logo .gold,
+.hero-logo .gold {
+  background: var(--metallic-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 0.35px rgba(255, 226, 138, 0.28);
+  text-shadow:
+    0 1px 0 rgba(76, 43, 10, 0.55),
+    0 0 16px rgba(216, 156, 48, 0.26),
+    0 0 32px rgba(255, 218, 119, 0.14);
+}
+
+h1 em {
+  filter: saturate(1.16) contrast(1.14) brightness(1.08);
+}
+
+.eyebrow,
+.scroll-note,
+.route-option strong,
+.button-dark,
+.contact-name,
+h3 {
+  color: var(--gold-bright);
+  text-shadow: 0 0 16px rgba(216, 156, 48, 0.14);
+}
