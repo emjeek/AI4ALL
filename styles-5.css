@@ -7,6 +7,26 @@
   filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 18px rgba(212, 170, 88, 0.18));
 }
 
+h1 em {
+  background: linear-gradient(
+    112deg,
+    #8c692f 0%,
+    #c2923e 18%,
+    #f6de9d 36%,
+    #fff0b6 45%,
+    #bd8737 56%,
+    #8c692f 70%,
+    #f5d98f 86%,
+    #9a6b28 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow:
+    0 1px 0 rgba(55, 34, 10, 0.42),
+    0 0 12px rgba(212, 170, 88, 0.12);
+}
+
 .hero-logo-image .stack-ai,
 .hero-logo-image .stack-four,
 .hero-logo-image .stack-all {
